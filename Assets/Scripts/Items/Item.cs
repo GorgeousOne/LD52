@@ -2,17 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Item : MonoBehaviour
+[CreateAssetMenu(fileName = "New Item", menuName = "Item")]
+public class Item : ScriptableObject
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public int id;
+    public string name;
+    public string description;
+    [SerializeField] private GameObject prefab;
+    public GameObject gameobject = null;
 
-    // Update is called once per frame
-    void Update()
+    public void onCreation()
     {
-        
+        gameobject = (GameObject)Instantiate(prefab);
+        gameobject.transform.parent = GameObject.Find("ItemHandler").transform;
     }
 }

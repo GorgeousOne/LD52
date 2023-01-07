@@ -4,21 +4,21 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour {
     
-    [SerializeField] private GameObject itemType;
+    [SerializeField] private Item itemType;
     
     // Start is called before the first frame update
-    void Start()
-    {
-        
+    void Start(){
+
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update(){
         
     }
 
-    public Item GetItem() {
-        return null;
+    public Item GetItem() {//add a cost to the Item
+        Item i = Instantiate(itemType);
+        i.onCreation();
+        return i;
     }
 }
