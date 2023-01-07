@@ -41,6 +41,8 @@ public class PlotContent : MonoBehaviour {
 		if (!IsTilled()) {
 			throw new InvalidOperationException("Plot not tilled yet");
 		}
-		return _plantedItem;
+		Item result = _plantedItem;
+		_plantedItem = null;
+		return result;
 	}
 }
