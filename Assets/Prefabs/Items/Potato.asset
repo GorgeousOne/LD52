@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 2
   name: Potato
-  description: Potato
+  description: Smash em boil em put em in a stew
   prefab: {fileID: 3412631461303971009, guid: 5d92c2f4318e5bb489cf1f3b99c2f11e, type: 3}
   gameobject: {fileID: 0}
