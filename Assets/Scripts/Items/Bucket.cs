@@ -24,10 +24,8 @@ public class Bucket : Tool {
 				break;
 			case InteractableType.Plot:
 				PlotContent plot = i.GetComponent<PlotContent>();
-				Debug.Log("water plot" + isFilled + !plot.IsWatered);
 				
 				if (isFilled && !plot.IsWatered) {
-					Debug.Log("mhhh  yes");
 					plot.SetWatered();
 					Pour();
 				}

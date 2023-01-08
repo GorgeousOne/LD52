@@ -17,3 +17,9 @@ MonoBehaviour:
   description: Smash em boil em put em in a stew
   prefab: {fileID: 3412631461303971009, guid: 5d92c2f4318e5bb489cf1f3b99c2f11e, type: 3}
   gameobject: {fileID: 0}
+  baseSprite: {fileID: 21300000, guid: 701ab41154d28fd43abb90ad316edc50, type: 3}
+  plantedSprite: {fileID: 21300000, guid: e5a4e34f1c977504bbe3f85c4376f677, type: 3}
+  growingSprite: {fileID: 21300000, guid: 181209723404c9d40a4090fbb705abff, type: 3}
+  finishedSprite: {fileID: 21300000, guid: 3dee538ad54ce814586ab3d9a6232d6f, type: 3}
+  witheredSprite: {fileID: 21300000, guid: 7581e0fd538048a4999dac7b70431938, type: 3}
+  growingtime: 10
