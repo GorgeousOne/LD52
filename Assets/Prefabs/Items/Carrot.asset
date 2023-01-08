@@ -17,3 +17,9 @@ MonoBehaviour:
   description: Yummy yummy in your tummy
   prefab: {fileID: 3412631461303971009, guid: 4dc6322e7339bf5408aaabea1de47921, type: 3}
   gameobject: {fileID: 0}
+  baseSprite: {fileID: 21300000, guid: 874d8401331ede14087e8d8d486ddda6, type: 3}
+  plantedSprite: {fileID: 21300000, guid: a86586908922bf64ab5c2b918e22cbe4, type: 3}
+  growingSprite: {fileID: 21300000, guid: 9b09cb391a87c6646919206226e216bf, type: 3}
+  finishedSprite: {fileID: 21300000, guid: fd098fb4cf57bad419701c802e442b7e, type: 3}
+  witheredSprite: {fileID: 21300000, guid: f09eae8c0ea04254b90c5386a034a225, type: 3}
+  growingtime: 10
