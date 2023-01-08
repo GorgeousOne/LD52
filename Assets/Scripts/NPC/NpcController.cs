@@ -43,7 +43,6 @@ public class NpcController : MonoBehaviour {
 	}
 	
 	public void SayItem() {
-		OnItemReceive.Invoke(this);
 		_bubble.gameObject.SetActive(true);
 		_bubble.DisplayItem(wantedItem, true);
 	}

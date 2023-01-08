@@ -8,7 +8,7 @@ public class Item : ScriptableObject
     public int id;
     public string name;
     public string description;
-    [SerializeField] private GameObject prefab;
+    public GameObject prefab;
     public GameObject gameobject = null;
 
     public void onCreation()
