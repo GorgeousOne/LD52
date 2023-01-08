@@ -7,7 +7,7 @@ public class Item : ScriptableObject
 {
     public int id;
     public string name;
-    public string description;
+    public int price;
     public GameObject prefab;
     public GameObject gameobject = null;
     public Sprite seedSprite;
