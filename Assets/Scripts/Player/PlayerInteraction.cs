@@ -10,8 +10,8 @@ public class PlayerInteraction : MonoBehaviour {
 	[SerializeField] private PlotHandler plotHandler;
 	[SerializeField] private Bucket bucketHandler;
 	
-	public Item heldItem = null;
-	public Bucket heldBucket = null;
+	public Item heldItem;
+	public Bucket heldBucket;
 	private List<Transform> proximity = new List<Transform>();
 
 
@@ -40,14 +40,8 @@ public class PlayerInteraction : MonoBehaviour {
 		
 		if (Input.GetKeyUp(KeyCode.E)) {
 			_HandleE(interactedItem, bucket, interactedPlot, interactedSpawner);
-		}
-
-		if (heldItem != null)
-		{
-			heldItem.gameobject.transform.position = transform.position + Vector3.up * 0.5f;
-		}
-		else if(heldBucket != null ){
-			heldBucket.transform.position = transform.position + Vector3.up * 0.5f;
+		} else if (Input.GetKeyUp(KeyCode.Q)) {
+			_DropItem();
 		}
 	}
 
@@ -86,9 +80,6 @@ public class PlayerInteraction : MonoBehaviour {
 				heldItem.gameobject.SetActive(false);
 				heldItem = null;
 			}
-			else {
-				_DropItem();
-			}
 		}
 		else if(heldBucket != null && heldItem == null)
 		{
@@ -101,14 +92,9 @@ public class PlayerInteraction : MonoBehaviour {
 				PlotContent plotcontent = interactedPlot.GetComponent<PlotContent>();
 				plotcontent.water(heldBucket);
 			}
-			else
-			{
-				heldBucket = null;
-			}
 		}
 		else
 		{
-
 			if (interactedItem != null)
 			{
 				heldItem = interactedItem;
@@ -119,17 +105,27 @@ public class PlayerInteraction : MonoBehaviour {
 			}else if( bucket != null)
 			{
 				heldBucket = bucket;
+				heldBucket.transform.position = transform.position + Vector3.up * 0.5f;
+				heldBucket.transform.parent = transform;
 			}
 		}
-
 		if (heldItem != null) {
-			
+			heldItem.gameobject.transform.position = transform.position + Vector3.up * 0.5f;
+			heldItem.gameobject.transform.parent = transform;
 		}
 	}
 	
 	//well i told you to stop
-	private void _DropItem(){
-		heldItem = null;
+	private void _DropItem()
+	{
+		if (heldBucket != null) {
+			heldBucket.transform.parent = null;
+			heldBucket = null;
+		}
+		else if (heldItem != null) {
+			heldItem.gameobject.transform.parent = null;
+			heldItem = null;
+		}
 	}
 	
 	private Transform _GetClosest(Vector3 pos)
