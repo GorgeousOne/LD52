@@ -82,7 +82,7 @@ public class PlayerInteraction : MonoBehaviour {
 		} else if (interactedWater) {
 			indicator.position = new Vector2(interactedWater.transform.position.x, transform.position.y + 0.5f);
 		}else if (interactedPerson) {
-			indicator.position = new Vector2(interactedPerson.transform.position.x, transform.position.y + 0.5f);
+			indicator.position = interactedPerson.transform.position;
 		}
 		else {
 			newState = false;

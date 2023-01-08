@@ -559,6 +559,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 630857958}
     - target: {fileID: 551595623599420664, guid: ae803170cde475045a1670e956db051e, type: 3}
+      propertyPath: peopleHandler
+      value: 
+      objectReference: {fileID: 1684703138}
+    - target: {fileID: 551595623599420664, guid: ae803170cde475045a1670e956db051e, type: 3}
       propertyPath: scytheHandler
       value: 
       objectReference: {fileID: 1530055180}
