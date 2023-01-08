@@ -34,13 +34,15 @@ public class PlotContent : Interactable {
 	
 	private SpriteRenderer _icon;
 	private SpriteRenderer _wateredIcon;
-		
-	// Start is called before the first frame update
-	void OnEnable() {
+	private SpriteRenderer _watereSplashIcon;
+
+    // Start is called before the first frame update
+    void OnEnable() {
 		interactableType = InteractableType.Plot;
 		_currentstage = _stage.Barren;
 		_icon = transform.GetChild(0).GetComponent<SpriteRenderer>();
         _wateredIcon = transform.GetChild(1).GetComponent<SpriteRenderer>();
+        _watereSplashIcon = transform.GetChild(2).GetComponent<SpriteRenderer>();
         _icon.sprite = emptyPlot;
 	}
 
@@ -82,6 +84,7 @@ public class PlotContent : Interactable {
 	}
     void Update()
     {
+		_watereSplashIcon.enabled = _isWatered;
         _wateredIcon.enabled = !IsWatered && (_currentstage == _stage.Planted || _currentstage == _stage.Growing);
         switch (_currentstage)
 		{
