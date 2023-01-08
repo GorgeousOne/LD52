@@ -7,10 +7,11 @@ using UnityEngine.Events;
 public class NpcController : MonoBehaviour {
 
 	public Item wantedItem;
+	public UnityEvent<NpcController> OnItemReceive;
+	public UnityEvent<NpcController> OnTargerReach;
+	public int queueIndex;
+	
 	private Bubble _bubble;
-	public UnityEvent OnItemReceive;
-	
-	
 	private Vector2 _walkTarget;
 	private Vector2 _walkStartPos;
 	private float _walkStartTime = -1;
@@ -23,13 +24,14 @@ public class NpcController : MonoBehaviour {
 	private void Update() {
 		if (_walkStartTime != -1) {
 			float walkEndTime = _walkStartTime + _walkDuration;
-			float progress = (walkEndTime - Time.time) / _walkDuration;
-
-			if (walkEndTime < 1) {
+			float progress = (Time.time - _walkStartTime) / _walkDuration;
+			//Debug.Log("walk " + progress + "%");
+			if (progress < 1) {
 				transform.position = Vector2.Lerp(_walkStartPos, _walkTarget, progress);
 			} else {
 				transform.position = _walkTarget;
 				_walkStartTime = -1;
+				OnTargerReach.Invoke(this);
 			}
 		}
 	}
@@ -41,6 +43,7 @@ public class NpcController : MonoBehaviour {
 	}
 	
 	public void SayItem() {
+		OnItemReceive.Invoke(this);
 		_bubble.gameObject.SetActive(true);
 		_bubble.DisplayItem(wantedItem, true);
 	}
@@ -55,10 +58,11 @@ public class NpcController : MonoBehaviour {
 	}
 	
 	public void ReceiveItem() {
-		OnItemReceive.Invoke();
+		OnItemReceive.Invoke(this);
 	}
 
-	public void Walk(Vector2 target, float duration) {
+	public void Walk(int queueIdx, Vector2 target, float duration) {
+		queueIndex = queueIdx;
 		_walkStartPos = transform.position;
 		_walkTarget = target;
 		_walkDuration = duration;
