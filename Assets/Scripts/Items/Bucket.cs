@@ -44,16 +44,4 @@ public class Bucket : Tool {
 		isFilled = false;
 		_icon.sprite = _spriteEmpty;
 	}
-	
-	public Bucket distancesqr(Vector3 pos, ref float sqrdis)
-	{
-		float bucketdistance = (pos - transform.position).sqrMagnitude;
-		if (bucketdistance < sqrdis)
-		{
-			sqrdis = bucketdistance;
-			return this;
-		}
-		return null;
-
-	}
 }

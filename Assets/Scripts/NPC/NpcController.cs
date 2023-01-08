@@ -60,6 +60,13 @@ public class NpcController : MonoBehaviour {
 		OnItemReceive.Invoke(this);
 	}
 
+	public void Kill()
+	{
+		_bubble.gameObject.SetActive(false);
+		//Spawn Soul
+		Destroy(this);
+	}
+
 	public void Walk(int queueIdx, Vector2 target, float duration) {
 		queueIndex = queueIdx;
 		_walkStartPos = transform.position;

@@ -10,9 +10,10 @@ public class PlayerInteraction : MonoBehaviour {
 	[SerializeField] private PlotHandler plotHandler;
 	[SerializeField] private WaterHandler waterHandler;
 	[SerializeField] private Bucket bucketHandler;
+    [SerializeField] private Scythe scytheHandler;
 
-	public Item heldItem;
-	public Bucket heldBucket;
+    public Item heldItem;
+	public Tool heldTool;
 	private List<Transform> proximity = new();
 
 	[SerializeField] private Transform indicator;
@@ -27,36 +28,47 @@ public class PlayerInteraction : MonoBehaviour {
 	void Update() {
 		float distancesqr = interactDist * interactDist;
 		Bucket bucket = null;
-		PlotContent interactedPlot = plotHandler.GetClosestPlot(transform.position, ref distancesqr);
+        Scythe scythe = null;
+		Tool tool = null;
+
+
+        PlotContent interactedPlot = plotHandler.GetClosestPlot(transform.position, ref distancesqr);
 		Spawner interactedSpawner = spawnerHandler.GetClosestSpawner(transform.position, ref distancesqr);
 		Item interactedItem = itemHandler.GetClosestItem(transform.position, heldItem, ref distancesqr);
 		Water interactedWater = waterHandler.GetClosestWater(transform.position, ref distancesqr);
 
-		if (heldBucket == null) {
-			bucket = bucketHandler.distancesqr(transform.position, ref distancesqr);
-		}
 
-		_ToggleIndicator(interactedItem, bucket, interactedPlot, interactedSpawner, interactedWater);
+        if (heldTool == null) {
+			bucket = (Bucket)bucketHandler.distancesqr(transform.position, ref distancesqr);
+			scythe = (Scythe)scytheHandler.distancesqr(transform.position, ref distancesqr);
+
+			if (scythe)
+				tool = scythe;
+			else if (bucket)
+				tool = bucket;
+        }
+
+		_ToggleIndicator(interactedItem, tool , interactedPlot, interactedSpawner, interactedWater);
 
 		if (Input.GetKeyUp(KeyCode.E)) {
-			_HandleE(interactedItem, bucket, interactedPlot, interactedSpawner, interactedWater);
+			_HandleE(interactedItem, tool, interactedPlot, interactedSpawner, interactedWater);
 		}
 		else if (Input.GetKeyUp(KeyCode.Q)) {
 			_DropItem();
 		}
 	}
 
-	private void _ToggleIndicator(Item interactedItem, Bucket bucket, PlotContent interactedPlot,
+	private void _ToggleIndicator(Item interactedItem, Tool tool, PlotContent interactedPlot,
 		Spawner interactedSpawner, Water interactedWater) {
 		bool newState = true;
 		
 		if (interactedItem != null) {
 			indicator.position = interactedItem.gameobject.transform.position;
 		}
-		else if (bucket != null) {
-			indicator.position = bucket.transform.position;
+		else if (tool) {
+			indicator.position = tool.transform.position;
 		}
-		else if (interactedPlot != null) {
+        else if (interactedPlot != null) {
 			indicator.position =
 				interactedPlot.transform.position + Vector3.up * 0.5f +
 				Vector3.right *
@@ -72,8 +84,7 @@ public class PlayerInteraction : MonoBehaviour {
 		}
 		script_renderer.enabled = newState;
 	}
-
-	private void _HandleE(Item interactedItem, Bucket bucket, PlotContent interactedPlot, Spawner interactedSpawner,
+	private void _HandleE(Item interactedItem, Tool tool, PlotContent interactedPlot, Spawner interactedSpawner,
 		Water interactedWater) {
 		if (heldItem) {
 			if (interactedPlot) {
@@ -84,13 +95,13 @@ public class PlayerInteraction : MonoBehaviour {
 			}
 			else if (interactedWater) { }
 		}
-		else if (heldBucket) {
+		else if (heldTool/*.toolType == ToolType.Bucket*/) {
 			if (interactedWater) {
-				heldBucket.Interact(interactedWater);
+				heldTool.Interact(interactedWater);
 			}
 			else if (interactedPlot) {
 				PlotContent plotcontent = interactedPlot.GetComponent<PlotContent>();
-				heldBucket.Interact(plotcontent);
+				heldTool.Interact(plotcontent);
 			}
 		}
 		else {
@@ -100,13 +111,13 @@ public class PlayerInteraction : MonoBehaviour {
 			else if (interactedSpawner) {
 				heldItem = interactedSpawner.GetItem();
 			}
-			else if (bucket) {
-				heldBucket = bucket;
-				heldBucket.transform.position = transform.position + Vector3.up * 0.5f;
-				heldBucket.transform.parent = transform;
-			}
-		}
-
+            else if (tool)
+            {
+                heldTool = tool;
+                heldTool.transform.position = transform.position + Vector3.up * 0.5f;
+                heldTool.transform.parent = transform;
+            }
+        }
 		if (heldItem) {
 			heldItem.gameobject.transform.position = transform.position + Vector3.up * 0.5f;
 			heldItem.gameobject.transform.parent = transform;
@@ -115,9 +126,9 @@ public class PlayerInteraction : MonoBehaviour {
 
 	//well i told you to stop
 	private void _DropItem() {
-		if (heldBucket != null) {
-			heldBucket.transform.parent = null;
-			heldBucket = null;
+		if (heldTool != null) {
+			heldTool.transform.parent = null;
+			heldTool = null;
 		}
 		else if (heldItem != null) {
 			heldItem.gameobject.transform.parent = null;

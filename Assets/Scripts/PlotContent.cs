@@ -62,9 +62,20 @@ public class PlotContent : Interactable {
 		if (!IsTilled()) {
 			throw new InvalidOperationException("Plot not tilled yet");
 		}
-		Item result = _plantedItem;
-		_plantedItem = null;
-		return result;
+		Item result;
+        if (_currentstage == _stage.Ripe)
+		{
+			 result = _plantedItem;
+        }
+		else
+		{
+			Destroy(_plantedItem);
+			result = null;
+		}
+        _plantedItem = null;
+        _currentstage = _stage.Barren;
+        _icon.sprite = emptyPlot;
+        return result;
 	}
     void Update()
     {
