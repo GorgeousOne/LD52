@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class NpcController : MonoBehaviour {
+public class NpcController : Interactable {
 
 	public Item wantedItem;
 	public UnityEvent<NpcController> OnItemReceive;
@@ -18,9 +18,10 @@ public class NpcController : MonoBehaviour {
 	private float _walkDuration;
 	
 	private void OnEnable() {
+		interactableType = InteractableType.Person;
 		_bubble = transform.GetComponentInChildren<Bubble>();
 	}
-
+	
 	private void Update() {
 		if (_walkStartTime != -1) {
 			float walkEndTime = _walkStartTime + _walkDuration;

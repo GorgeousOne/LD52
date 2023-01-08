@@ -12,7 +12,7 @@ public class WaterHandler : MonoBehaviour {
 		_water = gameObject.GetComponentInChildren<Water>();
 	}
 
-	public Water GetClosestWater(Vector3 pos, ref float minDistSq) {
+	public Water GetClosestWater(Vector2 pos, ref float minDistSq) {
 		float distSq = pos.x - _water.transform.position.x;
 		distSq *= distSq;
 			
