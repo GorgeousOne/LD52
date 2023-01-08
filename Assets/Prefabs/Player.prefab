@@ -88,7 +88,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
+  m_SpriteSortPoint: 1
 --- !u!61 &551595623599420614
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -181,4 +181,9 @@ MonoBehaviour:
   interactDist: 0.75
   spawnerHandler: {fileID: 0}
   itemHandler: {fileID: 0}
+  plotHandler: {fileID: 0}
+  waterHandler: {fileID: 0}
+  bucketHandler: {fileID: 0}
   heldItem: {fileID: 0}
+  heldBucket: {fileID: 0}
+  indicator: {fileID: 0}
