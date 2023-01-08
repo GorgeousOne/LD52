@@ -75,7 +75,7 @@ public class PlotContent : MonoBehaviour {
 				{
 					if (Time.time - _growingsince > PlantedItem.growingtime)
 					{
-						if (IsWatered)
+						if (!IsWatered)
 						{
                             IsWatered = false;
 							_currentstage = _stage.growing;
@@ -94,7 +94,7 @@ public class PlotContent : MonoBehaviour {
 				{
 					if (Time.time - _growingsince > PlantedItem.growingtime * 1.1)
 					{
-						if (IsWatered)
+						if (!IsWatered)
 						{
                             IsWatered = false;
                             _currentstage = _stage.finished;
