@@ -9,7 +9,7 @@ public class StatsHandler : MonoBehaviour {
 	[SerializeField] private Image moodEmoji;
 
 	[SerializeField] private Sprite moodGood;
-	[SerializeField] private Sprite moodMe;
+	[SerializeField] private Sprite moodMeh;
 	[SerializeField] private Sprite moodBad;
 	
 	private void OnEnable() {
