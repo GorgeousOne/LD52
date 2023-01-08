@@ -10,6 +10,13 @@ public class Item : ScriptableObject
     public string description;
     [SerializeField] private GameObject prefab;
     public GameObject gameobject = null;
+    public Sprite baseSprite;
+    public Sprite plantedSprite;
+    public Sprite growingSprite;
+    public Sprite finishedSprite;
+    public Sprite witheredSprite;
+
+    public float growingtime = 10.0f;
 
     public void onCreation()
     {
