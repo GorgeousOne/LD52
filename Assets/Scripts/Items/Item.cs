@@ -10,6 +10,7 @@ public class Item : ScriptableObject
     public string description;
     public GameObject prefab;
     public GameObject gameobject = null;
+    public Sprite seedSprite;
     public Sprite baseSprite;
     public Sprite plantedSprite;
     public Sprite growingSprite;
@@ -17,6 +18,7 @@ public class Item : ScriptableObject
     public Sprite witheredSprite;
 
     public float growingtime = 10.0f;
+    private bool grown = false;
 
     public void onCreation()
     {

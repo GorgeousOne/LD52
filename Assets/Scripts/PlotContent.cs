@@ -65,8 +65,10 @@ public class PlotContent : Interactable {
 		Item result;
         if (_currentstage == _stage.Ripe)
 		{
-			Debug.Log("ripe");
-			 result = _plantedItem;
+			result = _plantedItem;
+            SpriteRenderer rend = result.gameobject.GetComponent<SpriteRenderer>();
+			rend.sprite = result.baseSprite;
+			result.grown = true;
         }
 		else
 		{

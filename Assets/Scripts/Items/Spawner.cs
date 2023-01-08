@@ -9,7 +9,7 @@ public class Spawner : MonoBehaviour {
 
     private void OnEnable() {
         SpriteRenderer icon = transform.GetChild(0).GetComponent<SpriteRenderer>();
-        icon.sprite = itemType.prefab.GetComponent<SpriteRenderer>().sprite;
+        icon.sprite = itemType.baseSprite;
     }
 
     // Update is called once per frame
