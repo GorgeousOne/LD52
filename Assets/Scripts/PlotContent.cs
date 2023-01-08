@@ -14,12 +14,13 @@ public class PlotContent : Interactable {
     private double _growingsince;
     private enum _stage
     {
-        baron,
-        planted,
-        growing,
-        finished,
-        withered
-    };
+        Barren,
+        Planted,
+        Growing,
+        Ripe,
+        Withered
+    }
+    
     private _stage _currentstage;
 
     public bool IsWatered {
@@ -37,7 +38,7 @@ public class PlotContent : Interactable {
 	// Start is called before the first frame update
 	void OnEnable() {
 		interactableType = InteractableType.Plot;
-		_currentstage = _stage.baron;
+		_currentstage = _stage.Barren;
 		_icon = transform.GetChild(0).GetComponent<SpriteRenderer>();
         _wateredIcon = transform.GetChild(1).GetComponent<SpriteRenderer>();
         _icon.sprite = emptyPlot;
@@ -49,7 +50,7 @@ public class PlotContent : Interactable {
 		}
 		_plantedItem = plantItem;
 		_icon.sprite = _plantedItem.plantedSprite;
-        _currentstage = _stage.planted;
+        _currentstage = _stage.Planted;
 		_growingsince = Time.time;
 	}
 	
@@ -67,61 +68,55 @@ public class PlotContent : Interactable {
 	}
     void Update()
     {
-        _wateredIcon.enabled = !IsWatered && (_currentstage == _stage.planted || _currentstage == _stage.growing);
+        _wateredIcon.enabled = !IsWatered && (_currentstage == _stage.Planted || _currentstage == _stage.Growing);
         switch (_currentstage)
 		{
-			case _stage.baron:
+			case _stage.Barren:
 				break;
-			case _stage.planted:
+			case _stage.Planted:
+				if (Time.time - _growingsince > PlantedItem.growingtime)
 				{
-					if (Time.time - _growingsince > PlantedItem.growingtime)
+					if (IsWatered)
 					{
-						if (!IsWatered)
-						{
-                            IsWatered = false;
-							_currentstage = _stage.growing;
-							_icon.sprite = PlantedItem.growingSprite;
-							_growingsince = Time.time;
-						}
-						else
-						{
-                            _currentstage = _stage.withered;
-							_icon.sprite = PlantedItem.witheredSprite;
-						}
+                        IsWatered = false;
+						_currentstage = _stage.Growing;
+						_icon.sprite = PlantedItem.growingSprite;
+						_growingsince = Time.time;
 					}
-					break;
-				}
-			case _stage.growing:
-				{
-					if (Time.time - _growingsince > PlantedItem.growingtime * 1.1)
+					else
 					{
-						if (!IsWatered)
-						{
-                            IsWatered = false;
-                            _currentstage = _stage.finished;
-							_icon.sprite = PlantedItem.finishedSprite;
-							_growingsince = Time.time;
-						}
-                        else
-                        {
-                            _currentstage = _stage.withered;
-                            _icon.sprite = PlantedItem.witheredSprite;
-                        }
-                    }
-					break;
-				}
-
-			case _stage.finished:
-				{
-					if (Time.time - _growingsince > PlantedItem.growingtime * 2)
-					{
-						_currentstage = _stage.finished;
+                        _currentstage = _stage.Withered;
 						_icon.sprite = PlantedItem.witheredSprite;
 					}
-					break;
-
 				}
-			case _stage.withered:
+				break;
+			case _stage.Growing:
+				if (Time.time - _growingsince > PlantedItem.growingtime * 1.1)
+				{
+					if (IsWatered)
+					{
+                        IsWatered = false;
+                        _currentstage = _stage.Ripe;
+						_icon.sprite = PlantedItem.finishedSprite;
+						_growingsince = Time.time;
+					}
+                    else
+                    {
+                        _currentstage = _stage.Withered;
+                        _icon.sprite = PlantedItem.witheredSprite;
+                    }
+                }
+				break;
+
+			case _stage.Ripe:
+				if (Time.time - _growingsince > PlantedItem.growingtime * 2)
+				{
+					_currentstage = _stage.Ripe;
+					_icon.sprite = PlantedItem.witheredSprite;
+				}
+				break;
+
+			case _stage.Withered:
 				{
 					break;
 				}
