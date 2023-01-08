@@ -2465,7 +2465,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 15
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &835259808
 GameObject:
@@ -2625,10 +2625,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb896b25941431b4891bf66f7448f5fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cashLabel: {fileID: 0}
-  moodGood: {fileID: 0}
-  moodMe: {fileID: 0}
-  moodBad: {fileID: 0}
+  balanceLabel: {fileID: 1720979444}
+  moodGood: {fileID: 868033295, guid: be86d36a19c430449ab007e3756859f9, type: 3}
+  moodMeh: {fileID: -466853519, guid: be86d36a19c430449ab007e3756859f9, type: 3}
+  moodBad: {fileID: 1668223065, guid: be86d36a19c430449ab007e3756859f9, type: 3}
 --- !u!1001 &883942120
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5114,7 +5114,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1574896386
 GameObject:
