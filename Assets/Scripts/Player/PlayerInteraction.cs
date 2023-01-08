@@ -10,7 +10,7 @@ public class PlayerInteraction : MonoBehaviour {
 	[SerializeField] private PlotHandler plotHandler;
 	[SerializeField] private WaterHandler waterHandler;
 	[SerializeField] private Bucket bucketHandler;
-    [SerializeField] private Scythe scytheHandler;
+	[SerializeField] private Scythe scytheHandler;
 
     public Item heldItem;
 	public Tool heldTool;
@@ -90,12 +90,13 @@ public class PlayerInteraction : MonoBehaviour {
 			if (interactedPlot) {
 				PlotContent plotcontent = interactedPlot.GetComponent<PlotContent>();
 				plotcontent.PlantItem(heldItem);
+				heldItem.gameobject.transform.parent = null;
 				heldItem.gameobject.SetActive(false);
 				heldItem = null;
 			}
 			else if (interactedWater) { }
 		}
-		else if (heldTool/*.toolType == ToolType.Bucket*/) {
+		else if (heldTool) {
 			if (interactedWater) {
 				heldTool.Interact(interactedWater);
 			}

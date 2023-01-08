@@ -65,6 +65,7 @@ public class PlotContent : Interactable {
 		Item result;
         if (_currentstage == _stage.Ripe)
 		{
+			Debug.Log("ripe");
 			 result = _plantedItem;
         }
 		else

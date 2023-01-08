@@ -30,7 +30,7 @@ public class Scythe : Tool
         if (harvested)
         {
             harvested.gameobject.transform.position = transform.position;
-            harvested.gameobject.SetActive(false);
+            harvested.gameobject.SetActive(true);
         }
     }
 }
