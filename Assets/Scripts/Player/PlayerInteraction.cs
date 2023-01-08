@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerInteraction : MonoBehaviour {
 	//dont look at this
+	[Min(0)] public int balance = 500;
 	[SerializeField] private float interactDist = 1.00f;
 	[SerializeField] private SpawnerHandler spawnerHandler;
 	[SerializeField] private ItemHandler itemHandler;
@@ -110,7 +111,7 @@ public class PlayerInteraction : MonoBehaviour {
 				heldItem = interactedItem;
 			}
 			else if (interactedSpawner) {
-				heldItem = interactedSpawner.GetItem();
+				heldItem = interactedSpawner.GetItem(ref balance);
 			}
             else if (tool)
             {

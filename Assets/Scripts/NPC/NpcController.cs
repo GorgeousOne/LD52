@@ -43,8 +43,9 @@ public class NpcController : MonoBehaviour {
 	}
 	
 	public void SayItem() {
-		_bubble.gameObject.SetActive(true);
-		_bubble.DisplayItem(wantedItem, true);
+		Debug.Log("(cant say stuff yet)");
+		// _bubble.gameObject.SetActive(true);
+		// _bubble.DisplayItem(wantedItem, true);
 	}
 	
 	private IEnumerator _HideBubbleLater(float time) {
