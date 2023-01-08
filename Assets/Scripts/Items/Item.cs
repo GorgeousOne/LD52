@@ -18,7 +18,7 @@ public class Item : ScriptableObject
     public Sprite witheredSprite;
 
     public float growingtime = 10.0f;
-    private bool grown = false;
+    public bool grown = false;
 
     public void onCreation()
     {
