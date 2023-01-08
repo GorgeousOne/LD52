@@ -71,45 +71,44 @@ public class PlayerInteraction : MonoBehaviour {
 	}
 	
 	private void _HandleE(Item interactedItem, Bucket bucket, GameObject interactedPlot, Spawner interactedSpawner) {
-		if(heldItem != null && heldBucket == null)
+		if(heldItem)
 		{
-			if(interactedPlot != null)
-			{
+			if (interactedPlot) {
 				PlotContent plotcontent = interactedPlot.GetComponent<PlotContent>();
 				plotcontent.PlantItem(heldItem);
 				heldItem.gameobject.SetActive(false);
 				heldItem = null;
 			}
 		}
-		else if(heldBucket != null && heldItem == null)
+		else if(heldBucket)
 		{
 			if (false)
 			{//water
 
 			}
-			else if(interactedPlot != null)
+			else if(interactedPlot)
 			{
 				PlotContent plotcontent = interactedPlot.GetComponent<PlotContent>();
-				plotcontent.water(heldBucket);
+				heldBucket.Interact(plotcontent);
 			}
 		}
 		else
 		{
-			if (interactedItem != null)
+			if (interactedItem)
 			{
 				heldItem = interactedItem;
 			}
-			else if (interactedSpawner != null)
+			else if (interactedSpawner)
 			{
 				heldItem = interactedSpawner.GetItem();
-			}else if( bucket != null)
+			}else if( bucket)
 			{
 				heldBucket = bucket;
 				heldBucket.transform.position = transform.position + Vector3.up * 0.5f;
 				heldBucket.transform.parent = transform;
 			}
 		}
-		if (heldItem != null) {
+		if (heldItem) {
 			heldItem.gameobject.transform.position = transform.position + Vector3.up * 0.5f;
 			heldItem.gameobject.transform.parent = transform;
 		}

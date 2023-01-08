@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class PlotContent : MonoBehaviour {
+public class PlotContent : Interactable {
 	
 	[SerializeField] private Sprite emptyPlot;
     [SerializeField] private Sprite needWater;
-
+	
     private bool _isWatered;
 	private Item _plantedItem;
 
@@ -36,6 +36,7 @@ public class PlotContent : MonoBehaviour {
 		
 	// Start is called before the first frame update
 	void OnEnable() {
+		interactableType = InteractableType.Plot;
 		_currentstage = _stage.baron;
 		_icon = transform.GetChild(0).GetComponent<SpriteRenderer>();
         _wateredIcon = transform.GetChild(1).GetComponent<SpriteRenderer>();
@@ -126,12 +127,8 @@ public class PlotContent : MonoBehaviour {
 				}
 		}
     }
-	public void water(Bucket bucket)
+	public void SetWatered()
 	{
-		if (bucket._isfilled)
-		{
-			IsWatered = true;
-			bucket.empty();
-        }
+		IsWatered = true;
 	}
 }
