@@ -14,6 +14,7 @@ public class PeopleHandler : MonoBehaviour {
 	
 	private float _lastSpawn;
 	private List<NpcController> _waitingPeople = new();
+	private NpcController _bargainer;
 	
 	private void OnEnable() {
 		Transform[] children = gameObject.GetComponentsInChildren<Transform>();
@@ -40,6 +41,15 @@ public class PeopleHandler : MonoBehaviour {
 		}
 	}
 
+	public NpcController GetClosestBargainer(Vector2 pos, ref float minDistSq) {
+		if (_bargainer == null) {
+			return null;
+		}
+		float distSq = Vector2.Distance(pos, _bargainer.transform.position);
+		distSq *= distSq;
+		return distSq < minDistSq ? _bargainer : null;	
+	}
+	
 	private void _OnPeronTargetReach(NpcController person) {
 		//kills person if already exited
 		if (person.queueIndex == -1) {
@@ -54,6 +64,7 @@ public class PeopleHandler : MonoBehaviour {
 		//makes person say item
 		} else if (person.queueIndex == 0) {
 			person.SayItem();
+			_bargainer = person;
 		}
 	}
 	

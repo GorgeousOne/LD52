@@ -10,6 +10,7 @@ public class PlayerInteraction : MonoBehaviour {
 	[SerializeField] private ItemHandler itemHandler;
 	[SerializeField] private PlotHandler plotHandler;
 	[SerializeField] private WaterHandler waterHandler;
+	[SerializeField] private PeopleHandler peopleHandler;
 	[SerializeField] private Bucket bucketHandler;
 	[SerializeField] private Scythe scytheHandler;
 
@@ -32,16 +33,17 @@ public class PlayerInteraction : MonoBehaviour {
         Scythe scythe = null;
 		Tool tool = null;
 
-
-        PlotContent interactedPlot = plotHandler.GetClosestPlot(transform.position, ref distancesqr);
-		Spawner interactedSpawner = spawnerHandler.GetClosestSpawner(transform.position, ref distancesqr);
-		Item interactedItem = itemHandler.GetClosestItem(transform.position, heldItem, ref distancesqr);
-		Water interactedWater = waterHandler.GetClosestWater(transform.position, ref distancesqr);
-
+		Vector2 pos = transform.position;
+		
+        PlotContent interactedPlot = plotHandler.GetClosestPlot(pos, ref distancesqr);
+		Spawner interactedSpawner = spawnerHandler.GetClosestSpawner(pos, ref distancesqr);
+		Item interactedItem = itemHandler.GetClosestItem(pos, heldItem, ref distancesqr);
+		Water interactedWater = waterHandler.GetClosestWater(pos, ref distancesqr);
+		NpcController interactedPerson = peopleHandler.GetClosestBargainer(pos, ref distancesqr);
 
         if (heldTool == null) {
-			bucket = (Bucket)bucketHandler.distancesqr(transform.position, ref distancesqr);
-			scythe = (Scythe)scytheHandler.distancesqr(transform.position, ref distancesqr);
+			bucket = (Bucket)bucketHandler.distancesqr(pos, ref distancesqr);
+			scythe = (Scythe)scytheHandler.distancesqr(pos, ref distancesqr);
 
 			if (scythe)
 				tool = scythe;
@@ -49,10 +51,10 @@ public class PlayerInteraction : MonoBehaviour {
 				tool = bucket;
         }
 
-		_ToggleIndicator(interactedItem, tool , interactedPlot, interactedSpawner, interactedWater);
+		_ToggleIndicator(interactedItem, tool , interactedPlot, interactedSpawner, interactedWater, interactedPerson);
 
 		if (Input.GetKeyUp(KeyCode.E)) {
-			_HandleE(interactedItem, tool, interactedPlot, interactedSpawner, interactedWater);
+			_HandleE(interactedItem, tool, interactedPlot, interactedSpawner, interactedWater, interactedPerson);
 		}
 		else if (Input.GetKeyUp(KeyCode.Q)) {
 			_DropItem();
@@ -60,7 +62,7 @@ public class PlayerInteraction : MonoBehaviour {
 	}
 
 	private void _ToggleIndicator(Item interactedItem, Tool tool, PlotContent interactedPlot,
-		Spawner interactedSpawner, Water interactedWater) {
+		Spawner interactedSpawner, Water interactedWater, NpcController interactedPerson) {
 		bool newState = true;
 		
 		if (interactedItem != null) {
@@ -79,6 +81,8 @@ public class PlayerInteraction : MonoBehaviour {
 			indicator.position = interactedSpawner.transform.position;
 		} else if (interactedWater) {
 			indicator.position = new Vector2(interactedWater.transform.position.x, transform.position.y + 0.5f);
+		}else if (interactedPerson) {
+			indicator.position = new Vector2(interactedPerson.transform.position.x, transform.position.y + 0.5f);
 		}
 		else {
 			newState = false;
@@ -86,7 +90,7 @@ public class PlayerInteraction : MonoBehaviour {
 		script_renderer.enabled = newState;
 	}
 	private void _HandleE(Item interactedItem, Tool tool, PlotContent interactedPlot, Spawner interactedSpawner,
-		Water interactedWater) {
+		Water interactedWater, NpcController interactedPerson) {
 		if (heldItem) {
 			if (interactedPlot) {
 				PlotContent plotcontent = interactedPlot.GetComponent<PlotContent>();
@@ -102,8 +106,9 @@ public class PlayerInteraction : MonoBehaviour {
 				heldTool.Interact(interactedWater);
 			}
 			else if (interactedPlot) {
-				PlotContent plotcontent = interactedPlot.GetComponent<PlotContent>();
-				heldTool.Interact(plotcontent);
+				heldTool.Interact(interactedPlot);
+			} else if (interactedPerson) {
+				heldTool.Interact(interactedPerson);
 			}
 		}
 		else {
