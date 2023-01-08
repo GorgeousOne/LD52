@@ -88,6 +88,7 @@ public class PlayerInteraction : MonoBehaviour {
 			}
 			else if(interactedPlot)
 			{
+				Debug.Log("pour bucket");
 				PlotContent plotcontent = interactedPlot.GetComponent<PlotContent>();
 				heldBucket.Interact(plotcontent);
 			}

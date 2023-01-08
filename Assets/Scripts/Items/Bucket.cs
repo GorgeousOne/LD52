@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class Bucket : Tool {
 	
-	public bool _isfilled;
-	[SerializeField] private Sprite _spriteFilled;
+	public bool isFilled;
 	[SerializeField] private Sprite _spriteEmpty;
+	[SerializeField] private Sprite _spriteFilled;
 
 	private SpriteRenderer _icon;
 
@@ -24,10 +24,12 @@ public class Bucket : Tool {
 				break;
 			case InteractableType.Plot:
 				PlotContent plot = i.GetComponent<PlotContent>();
+				Debug.Log("water plot" + isFilled + !plot.IsWatered);
 				
-				if (_isfilled && !plot.IsWatered) {
+				if (isFilled && !plot.IsWatered) {
+					Debug.Log("mhhh  yes");
 					plot.SetWatered();
-					Empty();
+					Pour();
 				}
 				break;
 		}
@@ -35,13 +37,13 @@ public class Bucket : Tool {
 
 	private void _Fill()
 	{
-		_isfilled = true;
+		isFilled = true;
 		_icon.sprite = _spriteFilled;
 	}
 	
-	public void Empty()
+	public void Pour()
 	{
-		_isfilled = false;
+		isFilled = false;
 		_icon.sprite = _spriteEmpty;
 	}
 	
