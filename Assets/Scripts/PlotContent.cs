@@ -27,7 +27,7 @@ public class PlotContent : MonoBehaviour {
 
 	public void PlantItem(Item plantItem) {
 		if (IsTilled()) {
-			throw new InvalidOperationException("Plot already tilled with" + _plantedItem.name);
+			throw new InvalidOperationException("Plot already tilled with " + _plantedItem.name);
 		}
 		_plantedItem = plantItem;
 		_icon.sprite = plantItem.gameobject.GetComponent<SpriteRenderer>().sprite;

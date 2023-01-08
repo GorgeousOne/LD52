@@ -116,6 +116,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wantedItem: {fileID: 0}
+  OnItemReceive:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &7780527905252189677
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -12,22 +12,24 @@ public class ItemHandler : MonoBehaviour
     {
     }
 
-    public Item GetClosestItem(Vector3 pos, float interactDist, Item holding)
+    public Item GetClosestItem(Vector3 pos, Item holding, ref float minDistSq)
     {
         _items = FindObjectsOfType<Item>().ToList();
         Item closest = null;
         if (holding != null)
             _items.Remove(holding);
-        float minDistSq = interactDist * interactDist;
 
         foreach (Item item in _items)
         {
-            float distSq = (pos - item.gameobject.transform.position).sqrMagnitude;
-
-            if (distSq < minDistSq)
+            if (item.gameobject.activeInHierarchy)
             {
-                minDistSq = distSq;
-                closest = item;
+                float distSq = (pos - item.gameobject.transform.position).sqrMagnitude;
+
+                if (distSq < minDistSq)
+                {
+                    minDistSq = distSq;
+                    closest = item;
+                }
             }
         }
         return closest;

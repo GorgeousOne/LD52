@@ -12,9 +12,8 @@ public class SpawnerHandler : MonoBehaviour {
 		_spawners = FindObjectsOfType<Spawner>().ToList();
 	}
 
-	public Spawner GetClosestSpawner(Vector3 pos, float interactDist) {
+	public Spawner GetClosestSpawner(Vector3 pos,ref float minDistSq) {
 		Spawner closest = null;
-		float minDistSq = interactDist * interactDist;
 		
 		foreach (Spawner spawner in _spawners) {
 			float distSq = (pos - spawner.transform.position).sqrMagnitude;
