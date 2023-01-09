@@ -219,7 +219,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactableType: 0
   emptyPlot: {fileID: 21300000, guid: 220df7e2871aa4948a5cc24736e4451f, type: 3}
-  needWater: {fileID: 21300000, guid: a6fbd5a181bc51e42a61a73fe8d727c8, type: 3}
 --- !u!82 &4413803710347657849
 AudioSource:
   m_ObjectHideFlags: 0
@@ -327,7 +326,7 @@ GameObject:
   - component: {fileID: 6147745452475476909}
   - component: {fileID: 6374320275176922838}
   m_Layer: 0
-  m_Name: Watered
+  m_Name: NeedsWater
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

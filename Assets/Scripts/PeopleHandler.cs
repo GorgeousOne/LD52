@@ -8,16 +8,22 @@ using Random = UnityEngine.Random;
 public class PeopleHandler : MonoBehaviour {
 
 	public UnityEvent OnItemSell;
-	[SerializeField] private float spawnInterval = 10;
+	public UnityEvent OnBargainBegin;
+	public UnityEvent OnBargainEnd;
+	[Range(30, 180)][SerializeField] private float spawnIntervalStart = 75;
+	[Range(1, 60)][SerializeField] private float spawnIntervalEnd = 35;
+	[Range(60, 600)][SerializeField] private float spawnSlopeTime = 300;
 	[SerializeField] private GameObject personPrefab;
 	[SerializeField] private float walkDuration = 1;
 	[SerializeField] private List<ItemType> npcItems;
-	
+
 	
 	private List<Vector2> _waypoints = new();
 	private Vector2 _spawnPoint;
 	private Vector2 _exitPoint;
-	
+
+	private float _gameStart;
+	private float _currSpawnInterval;
 	private float _lastSpawn;
 	private List<NpcController> _waitingPeople = new();
 	private NpcController _bargainer;
@@ -31,13 +37,18 @@ public class PeopleHandler : MonoBehaviour {
 		_spawnPoint = _waypoints.Last();
 		_waypoints.RemoveAt(0);
 		_waypoints.RemoveAt(_waypoints.Count - 1);
-		
-		_lastSpawn = Time.time - spawnInterval;
+
+		_gameStart = Time.time;
+		_currSpawnInterval = spawnIntervalStart;
+		_lastSpawn = Time.time - _currSpawnInterval;
 	}
 
 	void Update() {
-		if (_waitingPeople.Count < _waypoints.Count && Time.time - _lastSpawn >= spawnInterval) {
-			_lastSpawn += spawnInterval;
+		if (_waitingPeople.Count < _waypoints.Count && Time.time - _lastSpawn >= spawnIntervalStart) {
+			_lastSpawn += spawnIntervalStart;
+			float progress = (Time.time - _gameStart) / spawnSlopeTime;
+			_currSpawnInterval -= Mathf.Lerp(spawnIntervalStart, spawnIntervalEnd, progress);
+						
 			NpcController newPerson = Instantiate(personPrefab).GetComponent<NpcController>();
 			newPerson.wantedItemType = RandomItem();
 			newPerson.transform.position = _spawnPoint;
@@ -73,6 +84,7 @@ public class PeopleHandler : MonoBehaviour {
 		} else if (person.queueIndex == 0) {
 			person.SayItem();
 			_bargainer = person;
+			OnBargainBegin.Invoke();
 		}
 	}
 	
@@ -80,9 +92,13 @@ public class PeopleHandler : MonoBehaviour {
 		OnItemSell.Invoke();
 		_waitingPeople.Remove(person);
 		person.Walk(-1, _exitPoint, 3*walkDuration);
-
+		
 		foreach (NpcController other in _waitingPeople) {
 			other.Walk(other.queueIndex - 1 , _waypoints[other.queueIndex - 1], walkDuration);
+		}
+
+		if (_waitingPeople.Count == 0) {
+			OnBargainEnd.Invoke();
 		}
 	}
 	

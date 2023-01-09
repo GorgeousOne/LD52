@@ -2,19 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Random = UnityEngine.Random;
 
 public class PlotContent : Interactable {
 	[SerializeField] private Sprite emptyPlot;
-	[SerializeField] private Sprite needWater;
 
 	private bool _isWatered;
 	private ItemType _plantedItemType;
-	private int _fertilized = 1;
-	private double _growingsince;
+	private bool _isFertilized;
+	private double _growStartTime;
 
 	private AudioSource _audio;
 
-	private enum _stage {
+	private enum GrowStage {
 		Barren,
 		Planted,
 		Growing,
@@ -22,29 +22,26 @@ public class PlotContent : Interactable {
 		Withered
 	}
 
-	private _stage _currentstage;
+	private GrowStage _currentstage;
 
-	public bool IsWatered {
-		get { return _isWatered; }
-		set { _isWatered = value; }
-	}
+	public bool IsWatered => _isWatered;
 
 	public ItemType PlantedItemType {
 		get { return _plantedItemType; }
 	}
 
 	private SpriteRenderer _icon;
-	private SpriteRenderer _wateredIcon;
-	private SpriteRenderer _watereSplashIcon;
+	private SpriteRenderer _needsWaterIcon;
+	private SpriteRenderer _waterSplashIcon;
 	private SpriteRenderer _fertilizedIcon;
 
 	// Start is called before the first frame update
 	void OnEnable() {
 		interactableType = InteractableType.Plot;
-		_currentstage = _stage.Barren;
+		_currentstage = GrowStage.Barren;
 		_icon = transform.GetChild(0).GetComponent<SpriteRenderer>();
-		_wateredIcon = transform.GetChild(1).GetComponent<SpriteRenderer>();
-		_watereSplashIcon = transform.GetChild(2).GetComponent<SpriteRenderer>();
+		_needsWaterIcon = transform.GetChild(1).GetComponent<SpriteRenderer>();
+		_waterSplashIcon = transform.GetChild(2).GetComponent<SpriteRenderer>();
 		_fertilizedIcon = transform.GetChild(3).GetComponent<SpriteRenderer>();
 		_icon.sprite = emptyPlot;
 		
@@ -53,21 +50,26 @@ public class PlotContent : Interactable {
 
 	public bool PlantItem(ItemType plantItemType) {
 		if (plantItemType.id == 0) {
-			_fertilized += 1;
-			return true;
-		}
-		else if (plantItemType.id == -1) {
+			if (_currentstage is GrowStage.Barren or GrowStage.Planted) {
+				_isFertilized = true;
+				_fertilizedIcon.enabled = true;
+				return true;
+			}
 			return false;
 		}
-
+		if (plantItemType.id == -1) {
+			return false;
+		}
 		if (IsTilled()) {
 			return false; //throw new InvalidOperationException("Plot already tilled with " + _plantedItem.name);
 		}
-
+		if (!_isWatered) {
+			_needsWaterIcon.enabled = true;
+		}
 		_plantedItemType = plantItemType;
 		_icon.sprite = _plantedItemType.plantedSprite;
-		_currentstage = _stage.Planted;
-		_growingsince = Time.time;
+		_currentstage = GrowStage.Planted;
+		_growStartTime = Time.time;
 		_audio.Play();
 		return true;
 	}
@@ -76,79 +78,82 @@ public class PlotContent : Interactable {
 		return _plantedItemType != null;
 	}
 
-	public Item Harvest() {
+	public void Harvest() {
 		if (!IsTilled()) {
 			throw new InvalidOperationException("Plot not tilled yet");
 		}
 
-		Item result;
-
-		if (_currentstage == _stage.Finished) {
-			result = _plantedItemType.OnCreation(transform.position);
-			// SpriteRenderer rend = result.gameobject.GetComponent<SpriteRenderer>();
-			// rend.sprite = result.baseSprite;
-			// result.grown = true;
+		if (_currentstage == GrowStage.Finished) {
+			for (int i = 0; i < (_isFertilized ? 2 : 1); ++i) {
+				Vector3 rnd = new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized;
+				_plantedItemType.OnCreation(transform.position + .5f * rnd);
+			}
 		}
 		else {
 			Destroy(_plantedItemType);
-			result = null;
 		}
-
-		_fertilized = 1;
+		_SetFertilized(false);
+		SetWatered(false);
 		_plantedItemType = null;
-		_currentstage = _stage.Barren;
+		_currentstage = GrowStage.Barren;
 		_icon.sprite = emptyPlot;
-		return result;
 	}
 
 	void Update() {
-		_watereSplashIcon.enabled = _isWatered;
-		_fertilizedIcon.enabled = _fertilized > 1;
-		_wateredIcon.enabled = (!IsWatered && _fertilized == 1) &&
-		                       (_currentstage == _stage.Planted || _currentstage == _stage.Growing);
+		// _fertilizedIcon.enabled = _fertilized;
+		// _wateredIcon.enabled = !IsWatered && (_currentstage == _stage.Planted || _currentstage == _stage.Growing);
+		
 		switch (_currentstage) {
-			case _stage.Barren:
+			case GrowStage.Barren:
 				break;
-			case _stage.Planted:
-				if (Time.time - _growingsince > PlantedItemType.growingtime / _fertilized) {
-					if (IsWatered || _fertilized > 1) {
-						IsWatered = false;
-						_currentstage = _stage.Growing;
+			case GrowStage.Planted:
+				if (Time.time - _growStartTime > PlantedItemType.growingtime) {
+					if (IsWatered) {
+						_currentstage = GrowStage.Growing;
 						_icon.sprite = PlantedItemType.growingSprite;
-						_growingsince = Time.time;
+						_growStartTime += PlantedItemType.growingtime;
 					}
 					else {
-						_currentstage = _stage.Withered;
+						_currentstage = GrowStage.Withered;
 						_icon.sprite = PlantedItemType.witheredSprite;
 					}
+					SetWatered(false);
 				}
 				break;
-			case _stage.Growing:
-				if (Time.time - _growingsince > (PlantedItemType.growingtime * 1.1) / _fertilized) {
-					if (IsWatered || _fertilized > 1) {
-						IsWatered = false;
-						_currentstage = _stage.Finished;
+			case GrowStage.Growing:
+				if (Time.time - _growStartTime > PlantedItemType.growingtime) {
+					if (_isWatered) {
+						_currentstage = GrowStage.Finished;
 						_icon.sprite = PlantedItemType.finishedSprite;
-						_growingsince = Time.time;
+						_growStartTime += PlantedItemType.growingtime;
 					}
 					else {
-						_currentstage = _stage.Withered;
+						_currentstage = GrowStage.Withered;
 						_icon.sprite = PlantedItemType.witheredSprite;
 					}
+					SetWatered(false);
 				}
 				break;
-			case _stage.Finished:
-				if (Time.time - _growingsince > PlantedItemType.growingtime * 2 && _fertilized == 1) {
-					_currentstage = _stage.Finished;
+			case GrowStage.Finished:
+				if (Time.time - _growStartTime > PlantedItemType.growingtime * 2) {
+					_currentstage = GrowStage.Withered;
 					_icon.sprite = PlantedItemType.witheredSprite;
 				}
 				break;
-			case _stage.Withered:
+			case GrowStage.Withered:
+				_SetFertilized(false);
 				break;
 		}
 	}
-
-	public void SetWatered() {
-		IsWatered = true;
+	
+	public void SetWatered(bool state = true) {
+		_isWatered = state;
+		_waterSplashIcon.enabled = _isWatered;
+		_needsWaterIcon.enabled = !_isWatered && _currentstage is GrowStage.Planted or GrowStage.Growing;
 	}
-}
+
+	private void _SetFertilized(bool state = true) {
+		_isFertilized = state;
+		_fertilizedIcon.enabled = _isFertilized;
+	}
+} 

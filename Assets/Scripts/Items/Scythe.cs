@@ -13,12 +13,10 @@ public class Scythe : Tool {
 	}
 
 	public override void Interact(Interactable i) {
-		Item harvested = null;
-		
 		switch (i.interactableType) {
 			case InteractableType.Plot:
 				PlotContent plot = i.GetComponent<PlotContent>();
-				harvested = plot.Harvest();
+				plot.Harvest();
 				_audio.Play();
 				break;
 			case InteractableType.Person:
@@ -27,10 +25,6 @@ public class Scythe : Tool {
 				_audio.Play();
 				OnKill.Invoke();
 				break;
-		}
-
-		if (harvested) {
-			harvested.transform.position = transform.position;
 		}
 	}
 }

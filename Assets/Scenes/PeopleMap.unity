@@ -1004,6 +1004,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5644648854432551486, guid: dc51f3db22dc7c843ba604917dbc4953, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6374320275176922838, guid: dc51f3db22dc7c843ba604917dbc4953, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8756079132514219440, guid: dc51f3db22dc7c843ba604917dbc4953, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9034198184729053621, guid: dc51f3db22dc7c843ba604917dbc4953, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dc51f3db22dc7c843ba604917dbc4953, type: 3}
 --- !u!4 &321722307 stripped
@@ -1186,7 +1202,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -3076,7 +3092,9 @@ MonoBehaviour:
   soldLabel: {fileID: 1688085308}
   balanceLabel: {fileID: 1720979444}
   moodEmoji: {fileID: 1307263304}
-  moodDropInterval: 10
+  moodIntervalStart: 60
+  moodIntervalEnd: 20
+  moodSlopeTime: 180
   moods:
   - {fileID: 1668223065, guid: be86d36a19c430449ab007e3756859f9, type: 3}
   - {fileID: -466853519, guid: be86d36a19c430449ab007e3756859f9, type: 3}
@@ -5968,7 +5986,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 44f14d7855a369f4cabaaf7f76eee07f, type: 3}
+  m_audioClip: {fileID: 8300000, guid: a6329e8a0c0555b4d939658adc33f127, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -6460,9 +6478,17 @@ MonoBehaviour:
   OnItemSell:
     m_PersistentCalls:
       m_Calls: []
-  spawnInterval: 0.25
+  OnBargainBegin:
+    m_PersistentCalls:
+      m_Calls: []
+  OnBargainEnd:
+    m_PersistentCalls:
+      m_Calls: []
+  spawnIntervalStart: 40
+  spawnIntervalEnd: 20
+  spawnSlopeTime: 180
   personPrefab: {fileID: 7378006140320147823, guid: 54def318e86208d418927ea3c5738c71, type: 3}
-  walkDuration: 0.5
+  walkDuration: 1
   npcItems:
   - {fileID: 11400000, guid: e0d7e99dc343e5d4f8657f76f89e719e, type: 2}
   - {fileID: 11400000, guid: 1c639bde078a41844b0dc1aecbf9f716, type: 2}
