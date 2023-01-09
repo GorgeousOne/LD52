@@ -53,7 +53,7 @@ public class PeopleHandler : MonoBehaviour {
 		if (_bargainer == null) {
 			return null;
 		}
-		float distSq = Vector2.Distance(pos, _bargainer.transform.position);
+		float distSq = Vector2.Distance(pos, _bargainer.transform.position + .5f * Vector3.up);
 		distSq *= distSq;
 		return distSq < minDistSq ? _bargainer : null;	
 	}
@@ -85,6 +85,7 @@ public class PeopleHandler : MonoBehaviour {
 			other.Walk(other.queueIndex - 1 , _waypoints[other.queueIndex - 1], walkDuration);
 		}
 	}
+	
 	private void _OnDeath(NpcController person)
 	{
 		_waitingPeople.Remove(person);

@@ -8,16 +8,15 @@ public class PlayerMovement : MonoBehaviour {
 	[SerializeField] private float accelerateTime = 0.2f;
 
 	private Rigidbody2D _rigid;
+	private SpriteRenderer _renderer;
+	
 	private float _last_input_w;
 	private float _last_input_h;
-
-
-	// Start is called before the first frame update
-	void Start() { }
 	
-	//
+
 	private void OnEnable() {
 		_rigid = GetComponent<Rigidbody2D>();
+		_renderer = GetComponent<SpriteRenderer>();
 	}
 
 	// Update is called once per frame
@@ -28,6 +27,10 @@ public class PlayerMovement : MonoBehaviour {
 	private void _ReadInputs() {
 		_last_input_w = Input.GetAxisRaw("Horizontal");
 		_last_input_h = Input.GetAxisRaw("Vertical");
+
+		if (Math.Abs(_last_input_w) > 0) {
+			_renderer.flipX = _last_input_w < 0;
+		}
 	}
 	
 	private void FixedUpdate() {
