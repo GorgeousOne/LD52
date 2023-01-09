@@ -3,10 +3,10 @@ using UnityEngine.Events;
 
 public class Spawner : MonoBehaviour {
     
-    [SerializeField] private Item itemType;
+    public Item itemType;
     public UnityEvent<int> OnBalanceChange;
     
-    private void OnEnable() {
+    public virtual void OnEnable() {
         SpriteRenderer icon = transform.GetChild(0).GetComponent<SpriteRenderer>();
         icon.sprite = itemType.baseSprite;
     }
@@ -16,7 +16,7 @@ public class Spawner : MonoBehaviour {
         
     }
 
-    public Item GetItem(ref int balance) {//add a cost to the Item
+    public virtual Item GetItem(ref int balance) {//add a cost to the Item
         if (balance < itemType.price) {
             return null;
         }

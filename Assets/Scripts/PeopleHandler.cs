@@ -36,7 +36,8 @@ public class PeopleHandler : MonoBehaviour {
 			newPerson.transform.position = _spawnPoint;
 			newPerson.OnItemReceive.AddListener(_OnPersonItemReceive);
 			newPerson.OnTargerReach.AddListener(_OnPeronTargetReach);
-			_waitingPeople.Add(newPerson);
+            newPerson.OnDeath.AddListener(_OnDeath);
+            _waitingPeople.Add(newPerson);
 			newPerson.Walk(_waypoints.Count - 1, _waypoints.Last(), walkDuration);
 		}
 	}
@@ -76,5 +77,16 @@ public class PeopleHandler : MonoBehaviour {
 			other.Walk(other.queueIndex - 1 , _waypoints[other.queueIndex - 1], walkDuration);
 		}
 	}
-	
+	private void _OnDeath(NpcController person)
+	{
+        _waitingPeople.Remove(person);
+        Destroy(person.gameObject);
+
+        foreach (NpcController other in _waitingPeople)
+        {
+            other.Walk(other.queueIndex - 1, _waypoints[other.queueIndex - 1], walkDuration);
+        }
+    }
+
+
 }

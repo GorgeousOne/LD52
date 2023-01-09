@@ -4,7 +4,8 @@ using UnityEngine;
 public enum InteractableType {
 	Plot,
 	Water,
-	Person
+	Person,
+	SoulGrinder
 }
 
 public abstract class Interactable : MonoBehaviour {

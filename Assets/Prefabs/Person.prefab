@@ -115,14 +115,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6cf1c1bcf5bddd409ca8659c01eff4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  interactableType: 0
   wantedItem: {fileID: 0}
+  Soul: {fileID: 11400000, guid: d349258b4dc5e494bbea9b6ca3344346, type: 2}
+  me: {fileID: 7378006140320147823}
   OnItemReceive:
     m_PersistentCalls:
       m_Calls: []
   OnTargerReach:
     m_PersistentCalls:
       m_Calls: []
-  wayPointIndex: 0
+  queueIndex: 0
 --- !u!1001 &7780527905252189677
 PrefabInstance:
   m_ObjectHideFlags: 0

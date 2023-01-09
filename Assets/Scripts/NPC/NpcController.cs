@@ -7,7 +7,10 @@ using UnityEngine.Events;
 public class NpcController : Interactable {
 
 	public Item wantedItem;
-	public UnityEvent<NpcController> OnItemReceive;
+	public Item Soul;
+
+    public UnityEvent<NpcController> OnDeath;
+    public UnityEvent<NpcController> OnItemReceive;
 	public UnityEvent<NpcController> OnTargerReach;
 	public int queueIndex;
 	
@@ -64,9 +67,16 @@ public class NpcController : Interactable {
 
 	public void Kill()
 	{
-		_bubble.gameObject.SetActive(false);
-		//Spawn Soul
-		Destroy(this);
+        //_bubble.gameObject.SetActive(false);
+        Item i = Instantiate(Soul);
+        i.onCreation();
+		i.gameobject.transform.position = transform.position + Vector3.up * 0.5f;
+        OnDeath.Invoke(this);
+
+    }
+    public void Trade()
+	{
+
 	}
 
 	public void Walk(int queueIdx, Vector2 target, float duration) {

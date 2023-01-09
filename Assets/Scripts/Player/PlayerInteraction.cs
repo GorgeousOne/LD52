@@ -91,40 +91,64 @@ public class PlayerInteraction : MonoBehaviour {
 	}
 	private void _HandleE(Item interactedItem, Tool tool, PlotContent interactedPlot, Spawner interactedSpawner,
 		Water interactedWater, NpcController interactedPerson) {
-		if (heldItem) {
-			if (interactedPlot) {
+		if (heldItem)
+		{
+			if (interactedPlot)
+			{
 				PlotContent plotcontent = interactedPlot.GetComponent<PlotContent>();
-				plotcontent.PlantItem(heldItem);
-				heldItem.gameobject.transform.parent = null;
-				heldItem.gameobject.SetActive(false);
-				heldItem = null;
+				if (plotcontent.PlantItem(heldItem))
+				{
+					heldItem.gameobject.transform.parent = null;
+					heldItem.gameobject.SetActive(false);
+					heldItem = null;
+				}
 			}
 			else if (interactedWater) { }
+			else if (interactedPerson)
+			{
+				interactedPerson.Trade();
+			}
+			else if (interactedSpawner)
+			{
+				if(interactedSpawner.itemType.id == 0)
+					heldItem = ((SoulGrinder)interactedSpawner).GetItem(heldItem);
+			}
 		}
-		else if (heldTool) {
-			if (interactedWater) {
+		else if (heldTool)
+		{
+			if (interactedWater)
+			{
 				heldTool.Interact(interactedWater);
 			}
-			else if (interactedPlot) {
+			else if (interactedPlot)
+			{
 				heldTool.Interact(interactedPlot);
-			} else if (interactedPerson) {
+			}
+			else if (interactedPerson)
+			{
 				heldTool.Interact(interactedPerson);
 			}
 		}
-		else {
-			if (interactedItem) {
+		else
+		{
+			if (interactedItem)
+			{
 				heldItem = interactedItem;
 			}
-			else if (interactedSpawner) {
+			else if (interactedSpawner)
+			{
 				heldItem = interactedSpawner.GetItem(ref balance);
 			}
-            else if (tool)
-            {
-                heldTool = tool;
-                heldTool.transform.position = transform.position + Vector3.up * 0.5f;
-                heldTool.transform.parent = transform;
-            }
-        }
+			else if (tool)
+			{
+				heldTool = tool;
+				heldTool.transform.position = transform.position + Vector3.up * 0.5f;
+				heldTool.transform.parent = transform;
+			}
+			else if (interactedPerson)
+			{
+			}
+		}
 		if (heldItem) {
 			heldItem.gameobject.transform.position = transform.position + Vector3.up * 0.5f;
 			heldItem.gameobject.transform.parent = transform;

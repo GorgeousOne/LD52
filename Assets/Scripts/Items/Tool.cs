@@ -2,7 +2,8 @@
 
 public  enum ToolType {
 	Bucket,
-	Scythe
+	Scythe,
+    Soul
 }
 
 public abstract class Tool : MonoBehaviour {

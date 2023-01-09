@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b72161bacffc4f4faf0a0b183a0d557, type: 3}
+  m_Name: GrindedSoul
+  m_EditorClassIdentifier: 
+  id: 0
+  name: Grinded Soul
+  price: 0
+  prefab: {fileID: 8256359798538596612, guid: d30e85b721dda2b42835931bb855aff7, type: 3}
+  gameobject: {fileID: 0}
+  seedSprite: {fileID: 0}
+  baseSprite: {fileID: 21300000, guid: e5dc2625f16217542b75601e7e1c12d6, type: 3}
+  plantedSprite: {fileID: 0}
+  growingSprite: {fileID: 0}
+  finishedSprite: {fileID: 0}
+  witheredSprite: {fileID: 0}
+  growingtime: 10
+  grown: 0
