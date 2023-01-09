@@ -135,7 +135,7 @@ public class PlotContent : Interactable {
 				}
 				break;
 			case GrowStage.Finished:
-				if (Time.time - _growStartTime > PlantedItemType.growingtime * 2) {
+				if (Time.time - _growStartTime > PlantedItemType.growingtime * 3) {
 					_currentstage = GrowStage.Withered;
 					_icon.sprite = PlantedItemType.witheredSprite;
 				}
