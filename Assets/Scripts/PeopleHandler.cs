@@ -76,7 +76,7 @@ public class PeopleHandler : MonoBehaviour {
 	
 	private void _OnPersonItemReceive(NpcController person) {
 		_waitingPeople.Remove(person);
-		person.Walk(-1, _exitPoint, walkDuration);
+		person.Walk(-1, _exitPoint, 3*walkDuration);
 
 		foreach (NpcController other in _waitingPeople) {
 			other.Walk(other.queueIndex - 1 , _waypoints[other.queueIndex - 1], walkDuration);

@@ -9,10 +9,10 @@ public class PlotContent : Interactable {
 
 	private bool _isWatered;
 	private ItemType _plantedItemType;
-
 	private int _fertilized = 1;
-
 	private double _growingsince;
+
+	private AudioSource _audio;
 
 	private enum _stage {
 		Barren,
@@ -47,6 +47,8 @@ public class PlotContent : Interactable {
 		_watereSplashIcon = transform.GetChild(2).GetComponent<SpriteRenderer>();
 		_fertilizedIcon = transform.GetChild(3).GetComponent<SpriteRenderer>();
 		_icon.sprite = emptyPlot;
+		
+		_audio = GetComponent<AudioSource>();
 	}
 
 	public bool PlantItem(ItemType plantItemType) {
@@ -66,6 +68,7 @@ public class PlotContent : Interactable {
 		_icon.sprite = _plantedItemType.plantedSprite;
 		_currentstage = _stage.Planted;
 		_growingsince = Time.time;
+		_audio.Play();
 		return true;
 	}
 

@@ -19,9 +19,12 @@ public class NpcController : Interactable {
 	private float _walkStartTime = -1;
 	private float _walkDuration;
 	
+	private AudioSource _audio;
+
 	private void OnEnable() {
 		interactableType = InteractableType.Person;
 		_bubble = transform.GetComponentInChildren<Bubble>(true);
+		_audio = GetComponent<AudioSource>();
 	}
 	
 	private void Update() {
@@ -65,7 +68,7 @@ public class NpcController : Interactable {
 	public void Kill()
 	{
         //_bubble.gameObject.SetActive(false);
-        Item soulDrop = Soul.OnCreation(transform.position + 0.5f * Vector3.left);
+        Item soulDrop = Soul.OnCreation(transform.position + 0.5f * Vector3.left + .5f * Vector3.up);
         OnDeath.Invoke(this);
     }
 	
@@ -78,6 +81,7 @@ public class NpcController : Interactable {
 		}
 		balance += i.itemType.price - 10;
 		OnItemReceive.Invoke(this);
+		_audio.Play();
 		return true;
 	}
 

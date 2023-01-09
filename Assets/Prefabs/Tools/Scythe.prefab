@@ -98,3 +98,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   toolType: 1
+  OnKill:
+    m_PersistentCalls:
+      m_Calls: []

@@ -10,8 +10,13 @@ public class Bucket : Tool {
 	[SerializeField] private Sprite _spriteFilled;
 
 	private SpriteRenderer _icon;
-
+	private AudioSource _fillingAudio;
+	private AudioSource _wateringAudio;
+	
 	void OnEnable() {
+		AudioSource[] audios = GetComponents<AudioSource>();
+		_fillingAudio = audios[0];
+		_wateringAudio = audios[1];
 		toolType = ToolType.Bucket;
 		_icon = transform.GetComponent<SpriteRenderer>();
 		_icon.sprite = _spriteEmpty;
@@ -37,11 +42,13 @@ public class Bucket : Tool {
 	{
 		isFilled = true;
 		_icon.sprite = _spriteFilled;
+		_fillingAudio.Play();
 	}
 	
 	public void Pour()
 	{
 		isFilled = false;
 		_icon.sprite = _spriteEmpty;
+		_wateringAudio.Play();
 	}
 }

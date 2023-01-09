@@ -17,7 +17,7 @@ public class PlayerInteraction : MonoBehaviour {
 	[SerializeField] private Bucket bucketHandler;
 	[SerializeField] private Scythe scytheHandler;
 	public UnityEvent<int> OnBalanceChange;
-
+	
     private Item _heldItem;
 	private Tool _heldTool;
 	private List<Transform> proximity = new();
@@ -25,7 +25,8 @@ public class PlayerInteraction : MonoBehaviour {
 	[SerializeField] private Transform indicator;
 	Renderer script_renderer;
 
-	void Start() {
+	void OnEnable() {
+		AudioSource[] audios = GetComponents<AudioSource>();
 		script_renderer = indicator.GetComponent<Renderer>();
 		script_renderer.enabled = false;
 	}
@@ -37,7 +38,7 @@ public class PlayerInteraction : MonoBehaviour {
         Scythe scythe = null;
 		Tool tool = null;
 
-		Vector2 pos = transform.position;
+		Vector2 pos = transform.position + .5f * Vector3.up;
 		
         PlotContent interactedPlot = plotHandler.GetClosestPlot(pos, ref distancesqr);
 		Spawner interactedSpawner = spawnerHandler.GetClosestSpawner(pos, ref distancesqr);

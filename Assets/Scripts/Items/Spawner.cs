@@ -3,18 +3,17 @@ using UnityEngine.Events;
 
 public class Spawner : MonoBehaviour {
     
+    protected AudioSource Audio;
+
     public ItemType itemType;
     public UnityEvent<int> OnBalanceChange;
     
     public virtual void OnEnable() {
+        Audio = GetComponent<AudioSource>();
         SpriteRenderer icon = transform.GetChild(0).GetComponent<SpriteRenderer>();
         icon.sprite = itemType.baseSprite;
     }
 
-    // Update is called once per frame
-    void Update() {
-        
-    }
 
     public virtual Item GetItem(ref int balance) {//add a cost to the Item
         if (balance < itemType.price) {
