@@ -22,6 +22,7 @@ public class Spawner : MonoBehaviour {
         Item item = itemType.OnCreation(transform.position + Vector3.up, true);
         balance -= itemType.price;
         OnBalanceChange.Invoke(balance);
+        Audio.Play();
         return item;
     }
 }

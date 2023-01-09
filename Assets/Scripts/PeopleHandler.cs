@@ -2,16 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 using Random = UnityEngine.Random;
 
 public class PeopleHandler : MonoBehaviour {
-	
+
+	public UnityEvent OnItemSell;
 	[SerializeField] private float spawnInterval = 10;
 	[SerializeField] private GameObject personPrefab;
 	[SerializeField] private float walkDuration = 1;
-
 	[SerializeField] private List<ItemType> npcItems;
-
+	
+	
 	private List<Vector2> _waypoints = new();
 	private Vector2 _spawnPoint;
 	private Vector2 _exitPoint;
@@ -75,6 +77,7 @@ public class PeopleHandler : MonoBehaviour {
 	}
 	
 	private void _OnPersonItemReceive(NpcController person) {
+		OnItemSell.Invoke();
 		_waitingPeople.Remove(person);
 		person.Walk(-1, _exitPoint, 3*walkDuration);
 
