@@ -4851,10 +4851,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf8fa3ba560d3ff4f85e74ee4089d139, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemType: {fileID: 0}
-  OnBalanceChange:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!212 &1438770597
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -5442,6 +5438,9 @@ MonoBehaviour:
   spawnInterval: 0.25
   personPrefab: {fileID: 7378006140320147823, guid: 54def318e86208d418927ea3c5738c71, type: 3}
   walkDuration: 0.5
+  npcItems:
+  - {fileID: 11400000, guid: e0d7e99dc343e5d4f8657f76f89e719e, type: 2}
+  - {fileID: 11400000, guid: 1c639bde078a41844b0dc1aecbf9f716, type: 2}
 --- !u!1001 &1712226399
 PrefabInstance:
   m_ObjectHideFlags: 0

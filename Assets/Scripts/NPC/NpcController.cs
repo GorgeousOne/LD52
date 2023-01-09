@@ -21,9 +21,8 @@ public class NpcController : Interactable {
 	private float _walkDuration;
 	
 	private void OnEnable() {
-
 		interactableType = InteractableType.Person;
-		_bubble = transform.GetComponentInChildren<Bubble>();
+		_bubble = transform.GetComponentInChildren<Bubble>(true);
 	}
 	
 	private void Update() {
@@ -48,9 +47,8 @@ public class NpcController : Interactable {
 	}
 	
 	public void SayItem() {
-        SpriteRenderer renderer = _bubble.GetComponent<SpriteRenderer>();
-		renderer.enabled = true;
-        _bubble.DisplayItem(wantedItem, true);
+		_bubble.gameObject.SetActive(true);
+        _bubble.DisplayItem(wantedItem, false);
 	}
 	
 	private IEnumerator _HideBubbleLater(float time) {

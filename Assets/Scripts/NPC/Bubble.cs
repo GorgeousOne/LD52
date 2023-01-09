@@ -19,6 +19,5 @@ public class Bubble : MonoBehaviour {
 		Debug.Log(_renderer.sprite);
 		_renderer.enabled = true;
 		_renderer.sprite = item.baseSprite;
-		
 	}
 }

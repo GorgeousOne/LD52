@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class PeopleHandler : MonoBehaviour {
 	
@@ -8,11 +10,9 @@ public class PeopleHandler : MonoBehaviour {
 	[SerializeField] private GameObject personPrefab;
 	[SerializeField] private float walkDuration = 1;
 
-	[SerializeField] private Item item1;
-    [SerializeField] private Item item2;
-    [SerializeField] private Item item3;
+	[SerializeField] private List<Item> npcItems;
 
-    private List<Vector2> _waypoints = new();
+	private List<Vector2> _waypoints = new();
 	private Vector2 _spawnPoint;
 	private Vector2 _exitPoint;
 	
@@ -38,11 +38,11 @@ public class PeopleHandler : MonoBehaviour {
 			_lastSpawn += spawnInterval;
 			NpcController newPerson = Instantiate(personPrefab).GetComponent<NpcController>();
 			newPerson.wantedItem = RandomItem();
-            newPerson.transform.position = _spawnPoint;
+			newPerson.transform.position = _spawnPoint;
 			newPerson.OnItemReceive.AddListener(_OnPersonItemReceive);
 			newPerson.OnTargerReach.AddListener(_OnPeronTargetReach);
-            newPerson.OnDeath.AddListener(_OnDeath);
-            _waitingPeople.Add(newPerson);
+			newPerson.OnDeath.AddListener(_OnDeath);
+			_waitingPeople.Add(newPerson);
 			newPerson.Walk(_waypoints.Count - 1, _waypoints.Last(), walkDuration);
 		}
 	}
@@ -84,30 +84,28 @@ public class PeopleHandler : MonoBehaviour {
 	}
 	private void _OnDeath(NpcController person)
 	{
-        _waitingPeople.Remove(person);
-        Destroy(person.gameObject);
+		_waitingPeople.Remove(person);
+		Destroy(person.gameObject);
 
-        foreach (NpcController other in _waitingPeople)
-        {
-            other.Walk(other.queueIndex - 1, _waypoints[other.queueIndex - 1], walkDuration);
-        }
-    }
-
-    private Item RandomItem()
-	{
-		Item item = null;
-		float random = Random.value;
-		if(random < 0.5f)
+		foreach (NpcController other in _waitingPeople)
 		{
-			item = item1;
-		}else if (random < 1.0f)
-		{
-			item = item2;
-		}else if (random > 0.09)
-		{
-			item = item3;
+			other.Walk(other.queueIndex - 1, _waypoints[other.queueIndex - 1], walkDuration);
 		}
-		return item;
+	}
+	
+	private Item RandomItem() {
+		float chanceSum = npcItems.Sum(item => item.npcChance);
+		float rnd = Random.Range(0, chanceSum);
+		float accChance = 0;
+		
+		foreach (var item in npcItems) {
+			accChance += item.npcChance;
+			
+			if (accChance >= rnd) {
+				return item;
+			}
+		}
+		throw new InvalidOperationException("Wait this should not happen");
 	}
 
 

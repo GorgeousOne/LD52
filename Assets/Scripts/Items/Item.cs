@@ -8,6 +8,7 @@ public class Item : ScriptableObject
     public int id;
     public string name;
     public int price;
+    public float npcChance;
     public GameObject prefab;
     public GameObject gameobject = null;
     public Sprite seedSprite;
