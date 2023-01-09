@@ -1,5 +1,10 @@
 
+using UnityEngine.Events;
+
 public class Scythe : Tool {
+	
+	public UnityEvent OnKill;
+
 	void OnEnable() {
 		toolType = ToolType.Bucket;
 	}
@@ -15,6 +20,7 @@ public class Scythe : Tool {
 			case InteractableType.Person:
 				NpcController npc = i.GetComponent<NpcController>();
 				npc.Kill();
+				OnKill.Invoke();
 				break;
 		}
 
