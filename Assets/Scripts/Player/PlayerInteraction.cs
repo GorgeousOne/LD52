@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class PlayerInteraction : MonoBehaviour {
 	//dont look at this
@@ -14,8 +15,8 @@ public class PlayerInteraction : MonoBehaviour {
 	[SerializeField] private Bucket bucketHandler;
 	[SerializeField] private Scythe scytheHandler;
 
-    public Item heldItem;
-	public Tool heldTool;
+    private Item _heldItem;
+	private Tool _heldTool;
 	private List<Transform> proximity = new();
 
 	[SerializeField] private Transform indicator;
@@ -37,11 +38,11 @@ public class PlayerInteraction : MonoBehaviour {
 		
         PlotContent interactedPlot = plotHandler.GetClosestPlot(pos, ref distancesqr);
 		Spawner interactedSpawner = spawnerHandler.GetClosestSpawner(pos, ref distancesqr);
-		Item interactedItem = itemHandler.GetClosestItem(pos, heldItem, ref distancesqr);
+		Item interactedItemType = itemHandler.GetClosestItem(pos, _heldItem, ref distancesqr);
 		Water interactedWater = waterHandler.GetClosestWater(pos, ref distancesqr);
 		NpcController interactedPerson = peopleHandler.GetClosestBargainer(pos, ref distancesqr);
 
-        if (heldTool == null) {
+        if (_heldTool == null) {
 			bucket = (Bucket)bucketHandler.distancesqr(pos, ref distancesqr);
 			scythe = (Scythe)scytheHandler.distancesqr(pos, ref distancesqr);
 
@@ -51,22 +52,22 @@ public class PlayerInteraction : MonoBehaviour {
 				tool = bucket;
         }
 
-		_ToggleIndicator(interactedItem, tool , interactedPlot, interactedSpawner, interactedWater, interactedPerson);
+		_ToggleIndicator(interactedItemType, tool , interactedPlot, interactedSpawner, interactedWater, interactedPerson);
 
 		if (Input.GetKeyUp(KeyCode.E)) {
-			_HandleE(interactedItem, tool, interactedPlot, interactedSpawner, interactedWater, interactedPerson);
+			_HandleE(interactedItemType, tool, interactedPlot, interactedSpawner, interactedWater, interactedPerson);
 		}
 		else if (Input.GetKeyUp(KeyCode.Q)) {
 			_DropItem();
 		}
 	}
 
-	private void _ToggleIndicator(Item interactedItem, Tool tool, PlotContent interactedPlot,
+	private void _ToggleIndicator(Item interactedItemType, Tool tool, PlotContent interactedPlot,
 		Spawner interactedSpawner, Water interactedWater, NpcController interactedPerson) {
 		bool newState = true;
 		
-		if (interactedItem != null) {
-			indicator.position = interactedItem.gameobject.transform.position;
+		if (interactedItemType != null) {
+			indicator.position = interactedItemType.transform.position;
 		}
 		else if (tool) {
 			indicator.position = tool.transform.position;
@@ -89,85 +90,86 @@ public class PlayerInteraction : MonoBehaviour {
 		}
 		script_renderer.enabled = newState;
 	}
-	private void _HandleE(Item interactedItem, Tool tool, PlotContent interactedPlot, Spawner interactedSpawner,
+	private void _HandleE(Item interactedItemType, Tool tool, PlotContent interactedPlot, Spawner interactedSpawner,
 		Water interactedWater, NpcController interactedPerson) {
-		if (heldItem)
+		if (_heldItem)
 		{
 			if (interactedPlot)
 			{
 				PlotContent plotcontent = interactedPlot.GetComponent<PlotContent>();
-				if (plotcontent.PlantItem(heldItem))
+				if (plotcontent.PlantItem(_heldItem.itemType))
 				{
-					heldItem.gameobject.transform.parent = null;
-					heldItem.gameobject.SetActive(false);
-					heldItem = null;
+					_heldItem.transform.parent = null;
+					_heldItem.gameObject.SetActive(false);
+					_heldItem = null;
 				}
 			}
 			else if (interactedWater) { }
 			else if (interactedPerson)
 			{
-				if (interactedPerson.Trade(heldItem))
+				if (interactedPerson.Trade(_heldItem))
 				{
-                    Destroy(heldItem.gameobject);
-                    heldItem = null;
+                    Destroy(_heldItem);
+                    _heldItem = null;
 				}
 			}
 			else if (interactedSpawner)
 			{
-				if(interactedSpawner.itemType.id == 0)
-					heldItem = ((SoulGrinder)interactedSpawner).GetItem(heldItem);
+				if (interactedSpawner.itemType.id == 0) {
+					_heldItem = ((SoulGrinder) interactedSpawner).GetItem(_heldItem);
+				}
 			}
 		}
-		else if (heldTool)
+		else if (_heldTool)
 		{
 			if (interactedWater)
 			{
-				heldTool.Interact(interactedWater);
+				_heldTool.Interact(interactedWater);
 			}
 			else if (interactedPlot)
 			{
-				heldTool.Interact(interactedPlot);
+				_heldTool.Interact(interactedPlot);
 			}
 			else if (interactedPerson)
 			{
-				heldTool.Interact(interactedPerson);
+				_heldTool.Interact(interactedPerson);
 			}
 		}
 		else
 		{
-			if (interactedItem)
+			if (interactedItemType)
 			{
-				heldItem = interactedItem;
+				_heldItem = interactedItemType;
 			}
 			else if (interactedSpawner)
 			{
-				heldItem = interactedSpawner.GetItem(ref balance);
+				_heldItem = interactedSpawner.GetItem(ref balance);
 			}
 			else if (tool)
 			{
-				heldTool = tool;
-				heldTool.transform.position = transform.position + Vector3.up * 0.5f;
-				heldTool.transform.parent = transform;
+				_heldTool = tool;
+				_heldTool.transform.position = transform.position + Vector3.up * 0.5f;
+				_heldTool.transform.parent = transform;
 			}
 			else if (interactedPerson)
 			{
 			}
 		}
-		if (heldItem) {
-			heldItem.gameobject.transform.position = transform.position + Vector3.up * 0.5f;
-			heldItem.gameobject.transform.parent = transform;
+		if (_heldItem) {
+			_heldItem.transform.position = transform.position + Vector3.up * 0.5f;
+			_heldItem.transform.parent = transform;
 		}
 	}
 
 	//well i told you to stop
 	private void _DropItem() {
-		if (heldTool != null) {
-			heldTool.transform.parent = null;
-			heldTool = null;
+		if (_heldTool != null) {
+			_heldTool.transform.parent = null;
+			_heldTool = null;
 		}
-		else if (heldItem != null) {
-			heldItem.gameobject.transform.parent = null;
-			heldItem = null;
+		else if (_heldItem != null) {
+			_heldItem.transform.parent = null;
+			_heldItem = null;
 		}
 	}
 

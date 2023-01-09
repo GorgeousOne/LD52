@@ -15,9 +15,9 @@ public class Bubble : MonoBehaviour {
         _renderer = t.gameObject.GetComponent<SpriteRenderer>();
     }
 
-    public void DisplayItem(Item item, bool isThought) {
+    public void DisplayItem(ItemType itemType, bool isThought) {
 		Debug.Log(_renderer.sprite);
 		_renderer.enabled = true;
-		_renderer.sprite = item.baseSprite;
+		_renderer.sprite = itemType.baseSprite;
 	}
 }

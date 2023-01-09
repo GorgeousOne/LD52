@@ -10,7 +10,7 @@ public class PeopleHandler : MonoBehaviour {
 	[SerializeField] private GameObject personPrefab;
 	[SerializeField] private float walkDuration = 1;
 
-	[SerializeField] private List<Item> npcItems;
+	[SerializeField] private List<ItemType> npcItems;
 
 	private List<Vector2> _waypoints = new();
 	private Vector2 _spawnPoint;
@@ -37,7 +37,7 @@ public class PeopleHandler : MonoBehaviour {
 		if (_waitingPeople.Count < _waypoints.Count && Time.time - _lastSpawn >= spawnInterval) {
 			_lastSpawn += spawnInterval;
 			NpcController newPerson = Instantiate(personPrefab).GetComponent<NpcController>();
-			newPerson.wantedItem = RandomItem();
+			newPerson.wantedItemType = RandomItem();
 			newPerson.transform.position = _spawnPoint;
 			newPerson.OnItemReceive.AddListener(_OnPersonItemReceive);
 			newPerson.OnTargerReach.AddListener(_OnPeronTargetReach);
@@ -93,7 +93,7 @@ public class PeopleHandler : MonoBehaviour {
 		}
 	}
 	
-	private Item RandomItem() {
+	private ItemType RandomItem() {
 		float chanceSum = npcItems.Sum(item => item.npcChance);
 		float rnd = Random.Range(0, chanceSum);
 		float accChance = 0;

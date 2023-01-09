@@ -3,7 +3,7 @@ using UnityEngine.Events;
 
 public class Spawner : MonoBehaviour {
     
-    public Item itemType;
+    public ItemType itemType;
     public UnityEvent<int> OnBalanceChange;
     
     public virtual void OnEnable() {
@@ -20,10 +20,9 @@ public class Spawner : MonoBehaviour {
         if (balance < itemType.price) {
             return null;
         }
-        Item i = Instantiate(itemType);
-        i.onCreation();
-        balance -= i.price;
+        Item item = itemType.OnCreation(transform.position + Vector3.up, true);
+        balance -= itemType.price;
         OnBalanceChange.Invoke(balance);
-        return i;
+        return item;
     }
 }

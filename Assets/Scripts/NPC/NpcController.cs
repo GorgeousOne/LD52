@@ -1,13 +1,12 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 public class NpcController : Interactable {
 
-	public Item wantedItem;
-	public Item Soul;
+	[FormerlySerializedAs("wantedItem")] public ItemType wantedItemType;
+	public ItemType Soul;
 
     public UnityEvent<NpcController> OnDeath;
     public UnityEvent<NpcController> OnItemReceive;
@@ -42,13 +41,13 @@ public class NpcController : Interactable {
 
 	public void ThinkItem(float time) {
 		_bubble.gameObject.SetActive(true);
-		_bubble.DisplayItem(wantedItem, true);
+		_bubble.DisplayItem(wantedItemType, true);
 		StartCoroutine(_HideBubbleLater(time));
 	}
 	
 	public void SayItem() {
 		_bubble.gameObject.SetActive(true);
-        _bubble.DisplayItem(wantedItem, false);
+        _bubble.DisplayItem(wantedItemType, false);
 	}
 	
 	private IEnumerator _HideBubbleLater(float time) {
@@ -61,25 +60,22 @@ public class NpcController : Interactable {
 	}
 	
 	public void ReceiveItem() {
-		OnItemReceive.Invoke(this);
 	}
 
 	public void Kill()
 	{
         //_bubble.gameObject.SetActive(false);
-        Item i = Instantiate(Soul);
-        i.onCreation();
-		i.gameobject.transform.position = transform.position + Vector3.up * 0.5f;
+        Item soulDrop = Soul.OnCreation(transform.position + 0.5f * Vector3.left);
         OnDeath.Invoke(this);
-
     }
+	
     public bool Trade(Item i)
 	{
 		Debug.Log("Trading...");
-		if(i.id == wantedItem.id)
-		{
+
+		if (i.itemType.id == wantedItemType.id) {
 			Destroy(i);
-			ReceiveItem();
+			OnItemReceive.Invoke(this);
 			return true;
 		}
 		return false;
