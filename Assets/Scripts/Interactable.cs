@@ -5,6 +5,7 @@ public enum InteractableType {
 	Plot,
 	Water,
 	Person,
+
 	SoulGrinder
 }
 

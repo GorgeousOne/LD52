@@ -11,11 +11,14 @@ public class Bubble : MonoBehaviour {
 	private SpriteRenderer _renderer;
 
 	private void OnEnable() {
-		_renderer = GetComponent<SpriteRenderer>();
-	}
+		Thought t = GetComponentInChildren<Thought>();
+        _renderer = t.gameObject.GetComponent<SpriteRenderer>();
+    }
 
-	public void DisplayItem(Item item, bool isThought) {
-		_renderer.sprite = isThought ? thoughtShape : speechShape;
+    public void DisplayItem(Item item, bool isThought) {
+		Debug.Log(_renderer.sprite);
+		_renderer.enabled = true;
+		_renderer.sprite = item.baseSprite;
 		
 	}
 }

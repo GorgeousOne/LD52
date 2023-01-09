@@ -7,8 +7,12 @@ public class PeopleHandler : MonoBehaviour {
 	[SerializeField] private float spawnInterval = 10;
 	[SerializeField] private GameObject personPrefab;
 	[SerializeField] private float walkDuration = 1;
-	
-	private List<Vector2> _waypoints = new();
+
+	[SerializeField] private Item item1;
+    [SerializeField] private Item item2;
+    [SerializeField] private Item item3;
+
+    private List<Vector2> _waypoints = new();
 	private Vector2 _spawnPoint;
 	private Vector2 _exitPoint;
 	
@@ -33,7 +37,8 @@ public class PeopleHandler : MonoBehaviour {
 		if (_waitingPeople.Count < _waypoints.Count && Time.time - _lastSpawn >= spawnInterval) {
 			_lastSpawn += spawnInterval;
 			NpcController newPerson = Instantiate(personPrefab).GetComponent<NpcController>();
-			newPerson.transform.position = _spawnPoint;
+			newPerson.wantedItem = RandomItem();
+            newPerson.transform.position = _spawnPoint;
 			newPerson.OnItemReceive.AddListener(_OnPersonItemReceive);
 			newPerson.OnTargerReach.AddListener(_OnPeronTargetReach);
             newPerson.OnDeath.AddListener(_OnDeath);
@@ -87,6 +92,23 @@ public class PeopleHandler : MonoBehaviour {
             other.Walk(other.queueIndex - 1, _waypoints[other.queueIndex - 1], walkDuration);
         }
     }
+
+    private Item RandomItem()
+	{
+		Item item = null;
+		float random = Random.value;
+		if(random < 0.5f)
+		{
+			item = item1;
+		}else if (random < 1.0f)
+		{
+			item = item2;
+		}else if (random > 0.09)
+		{
+			item = item3;
+		}
+		return item;
+	}
 
 
 }

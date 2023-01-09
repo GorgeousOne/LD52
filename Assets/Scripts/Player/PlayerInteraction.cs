@@ -106,7 +106,11 @@ public class PlayerInteraction : MonoBehaviour {
 			else if (interactedWater) { }
 			else if (interactedPerson)
 			{
-				interactedPerson.Trade();
+				if (interactedPerson.Trade(heldItem))
+				{
+                    Destroy(heldItem.gameobject);
+                    heldItem = null;
+				}
 			}
 			else if (interactedSpawner)
 			{

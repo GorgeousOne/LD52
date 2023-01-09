@@ -21,6 +21,7 @@ public class NpcController : Interactable {
 	private float _walkDuration;
 	
 	private void OnEnable() {
+
 		interactableType = InteractableType.Person;
 		_bubble = transform.GetComponentInChildren<Bubble>();
 	}
@@ -47,9 +48,9 @@ public class NpcController : Interactable {
 	}
 	
 	public void SayItem() {
-		Debug.Log("(cant say stuff yet)");
-		// _bubble.gameObject.SetActive(true);
-		// _bubble.DisplayItem(wantedItem, true);
+        SpriteRenderer renderer = _bubble.GetComponent<SpriteRenderer>();
+		renderer.enabled = true;
+        _bubble.DisplayItem(wantedItem, true);
 	}
 	
 	private IEnumerator _HideBubbleLater(float time) {
@@ -74,9 +75,16 @@ public class NpcController : Interactable {
         OnDeath.Invoke(this);
 
     }
-    public void Trade()
+    public bool Trade(Item i)
 	{
-
+		Debug.Log("Trading...");
+		if(i.id == wantedItem.id)
+		{
+			Destroy(i);
+			ReceiveItem();
+			return true;
+		}
+		return false;
 	}
 
 	public void Walk(int queueIdx, Vector2 target, float duration) {
