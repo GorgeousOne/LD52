@@ -14,11 +14,7 @@ public class Spawner : MonoBehaviour {
         icon.sprite = itemType.baseSprite;
     }
 
-
     public virtual Item GetItem(ref int balance) {//add a cost to the Item
-        if (balance < itemType.price) {
-            return null;
-        }
         Item item = itemType.OnCreation(transform.position + Vector3.up, true);
         balance -= itemType.price;
         OnBalanceChange.Invoke(balance);

@@ -76,7 +76,7 @@ public class NpcController : Interactable {
 	{
 		Debug.Log("Trading...");
 
-		if (i.itemType.id != wantedItemType.id) {
+		if (i.itemType.id != wantedItemType.id || i.IsSeed) {
 			return false;
 		}
 		balance += i.itemType.price - 10;

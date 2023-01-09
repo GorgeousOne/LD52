@@ -10,9 +10,9 @@ public class PeopleHandler : MonoBehaviour {
 	public UnityEvent OnItemSell;
 	public UnityEvent OnBargainBegin;
 	public UnityEvent OnBargainEnd;
-	[Range(30, 180)][SerializeField] private float spawnIntervalStart = 75;
-	[Range(1, 60)][SerializeField] private float spawnIntervalEnd = 35;
-	[Range(60, 600)][SerializeField] private float spawnSlopeTime = 300;
+	[Range(1, 180)][SerializeField] private float spawnIntervalStart = 25;
+	[Range(1, 60)][SerializeField] private float spawnIntervalEnd = 15;
+	[Range(60, 600)][SerializeField] private float spawnSlopeTime = 180;
 	[SerializeField] private GameObject personPrefab;
 	[SerializeField] private float walkDuration = 1;
 	[SerializeField] private List<ItemType> npcItems;
@@ -44,10 +44,10 @@ public class PeopleHandler : MonoBehaviour {
 	}
 
 	void Update() {
-		if (_waitingPeople.Count < _waypoints.Count && Time.time - _lastSpawn >= spawnIntervalStart) {
-			_lastSpawn += spawnIntervalStart;
+		if (_waitingPeople.Count < _waypoints.Count && Time.time >= _lastSpawn + _currSpawnInterval) {
+			_lastSpawn += _currSpawnInterval;
 			float progress = (Time.time - _gameStart) / spawnSlopeTime;
-			_currSpawnInterval -= Mathf.Lerp(spawnIntervalStart, spawnIntervalEnd, progress);
+			_currSpawnInterval = Mathf.Lerp(spawnIntervalStart, spawnIntervalEnd, progress);
 						
 			NpcController newPerson = Instantiate(personPrefab).GetComponent<NpcController>();
 			newPerson.wantedItemType = RandomItem();

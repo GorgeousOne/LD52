@@ -9,9 +9,9 @@ public class StatsHandler : MonoBehaviour {
 	[SerializeField] private TextMeshProUGUI soldLabel;
 	[SerializeField] private TextMeshProUGUI balanceLabel;
 	[SerializeField] private Image moodEmoji;
-	[Range(30, 180)][SerializeField] private float moodIntervalStart = 60;
+	[Range(30, 180)][SerializeField] private float moodIntervalStart = 45;
 	[Range(1, 60)][SerializeField] private float moodIntervalEnd = 20;
-	[Range(60, 600)][SerializeField] private float moodSlopeTime = 300;
+	[Range(60, 600)][SerializeField] private float moodSlopeTime = 180;
 
 	[SerializeField] private List<Sprite> moods;
 
@@ -53,12 +53,13 @@ public class StatsHandler : MonoBehaviour {
 	private void Update() {
 		if (_isBargaining && Time.time > _lastMooDrop + _currentMoodInterval) {
 			float progress = (Time.time - _gameStart) / moodSlopeTime;
-			_currentMoodInterval -= Mathf.Lerp(moodIntervalStart, moodIntervalEnd, progress);
+			_currentMoodInterval = Mathf.Lerp(moodIntervalStart, moodIntervalEnd, progress);
 			_DecreaseMood();
 		}
 	}
 
 	private void _StartMoodDecrease() {
+		Debug.Log("MOOD starts dropping " + _crowdMood);
 		_isBargaining = true;
 		_lastMooDrop = Time.time;
 	}
@@ -72,8 +73,6 @@ public class StatsHandler : MonoBehaviour {
 		soldLabel.text = _soldCount.ToString();
 		
 		_crowdMood = Math.Min(_crowdMood + 1, moods.Count - 1);
-		_lastMooDrop = Time.time;
-		
 		_UpdateEmoji();
 	}
 	
@@ -92,7 +91,7 @@ public class StatsHandler : MonoBehaviour {
 	private void _UpdateText(int newBalance) {
 		balanceLabel.SetText(newBalance.ToString());
 
-		if (newBalance == 0) {
+		if (newBalance < 0) {
 			_DeathScreen("Being Broke");
 		}
 	}

@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Soul
   m_EditorClassIdentifier: 
   id: -1
-  name: Soul
+  label: 
   price: 0
-  npcChance: 0
+  npcChance: 0.1
   prefab: {fileID: 4934369517867017040, guid: b32aa75c486ec2f4cbb5798e30ab5809, type: 3}
   growingtime: 10
   seedSprite: {fileID: 0}

@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Carrot
   m_EditorClassIdentifier: 
   id: 1
-  name: Carrot
+  label: 
   price: 50
-  npcChance: 0.4
+  npcChance: 0.2
   prefab: {fileID: 4934369517867017040, guid: b32aa75c486ec2f4cbb5798e30ab5809, type: 3}
   growingtime: 10
   seedSprite: {fileID: 21300000, guid: 460dd3f2d80debb41845106e90de68cd, type: 3}
