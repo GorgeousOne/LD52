@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Serialization;
 
 public class PlayerInteraction : MonoBehaviour {
 	//dont look at this
+	
 	[Min(0)] public int balance = 500;
 	[SerializeField] private float interactDist = 1.00f;
 	[SerializeField] private SpawnerHandler spawnerHandler;
@@ -14,6 +16,7 @@ public class PlayerInteraction : MonoBehaviour {
 	[SerializeField] private PeopleHandler peopleHandler;
 	[SerializeField] private Bucket bucketHandler;
 	[SerializeField] private Scythe scytheHandler;
+	public UnityEvent<int> OnBalanceChange;
 
     private Item _heldItem;
 	private Tool _heldTool;
@@ -38,7 +41,7 @@ public class PlayerInteraction : MonoBehaviour {
 		
         PlotContent interactedPlot = plotHandler.GetClosestPlot(pos, ref distancesqr);
 		Spawner interactedSpawner = spawnerHandler.GetClosestSpawner(pos, ref distancesqr);
-		Item interactedItemType = itemHandler.GetClosestItem(pos, _heldItem, ref distancesqr);
+		Item interactedItem = itemHandler.GetClosestItem(pos, _heldItem, ref distancesqr);
 		Water interactedWater = waterHandler.GetClosestWater(pos, ref distancesqr);
 		NpcController interactedPerson = peopleHandler.GetClosestBargainer(pos, ref distancesqr);
 
@@ -52,22 +55,22 @@ public class PlayerInteraction : MonoBehaviour {
 				tool = bucket;
         }
 
-		_ToggleIndicator(interactedItemType, tool , interactedPlot, interactedSpawner, interactedWater, interactedPerson);
+		_ToggleIndicator(interactedItem, tool , interactedPlot, interactedSpawner, interactedWater, interactedPerson);
 
 		if (Input.GetKeyUp(KeyCode.E)) {
-			_HandleE(interactedItemType, tool, interactedPlot, interactedSpawner, interactedWater, interactedPerson);
+			_HandleE(interactedItem, tool, interactedPlot, interactedSpawner, interactedWater, interactedPerson);
 		}
 		else if (Input.GetKeyUp(KeyCode.Q)) {
 			_DropItem();
 		}
 	}
 
-	private void _ToggleIndicator(Item interactedItemType, Tool tool, PlotContent interactedPlot,
+	private void _ToggleIndicator(Item interactedItem, Tool tool, PlotContent interactedPlot,
 		Spawner interactedSpawner, Water interactedWater, NpcController interactedPerson) {
 		bool newState = true;
 		
-		if (interactedItemType != null) {
-			indicator.position = interactedItemType.transform.position;
+		if (interactedItem != null) {
+			indicator.position = interactedItem.transform.position;
 		}
 		else if (tool) {
 			indicator.position = tool.transform.position;
@@ -90,7 +93,7 @@ public class PlayerInteraction : MonoBehaviour {
 		}
 		script_renderer.enabled = newState;
 	}
-	private void _HandleE(Item interactedItemType, Tool tool, PlotContent interactedPlot, Spawner interactedSpawner,
+	private void _HandleE(Item interactedItem, Tool tool, PlotContent interactedPlot, Spawner interactedSpawner,
 		Water interactedWater, NpcController interactedPerson) {
 		if (_heldItem)
 		{
@@ -104,20 +107,17 @@ public class PlayerInteraction : MonoBehaviour {
 					_heldItem = null;
 				}
 			}
-			else if (interactedWater) { }
 			else if (interactedPerson)
 			{
-				if (interactedPerson.Trade(_heldItem))
+				if (interactedPerson.Trade(_heldItem, ref balance))
 				{
-                    Destroy(_heldItem);
+                    Destroy(_heldItem.gameObject);
+                    OnBalanceChange.Invoke(balance);
                     _heldItem = null;
 				}
 			}
-			else if (interactedSpawner)
-			{
-				if (interactedSpawner.itemType.id == 0) {
-					_heldItem = ((SoulGrinder) interactedSpawner).GetItem(_heldItem);
-				}
+			else if (interactedSpawner && interactedSpawner is SoulGrinder grinder) {
+				_heldItem = grinder.GetItem(_heldItem);
 			}
 		}
 		else if (_heldTool)
@@ -137,13 +137,14 @@ public class PlayerInteraction : MonoBehaviour {
 		}
 		else
 		{
-			if (interactedItemType)
+			if (interactedItem)
 			{
-				_heldItem = interactedItemType;
+				_heldItem = interactedItem;
 			}
 			else if (interactedSpawner)
 			{
 				_heldItem = interactedSpawner.GetItem(ref balance);
+				OnBalanceChange.Invoke(balance);
 			}
 			else if (tool)
 			{
@@ -185,7 +186,6 @@ public class PlayerInteraction : MonoBehaviour {
 				closest = t;
 			}
 		}
-
 		return closest;
 	}
 }

@@ -1,6 +1,6 @@
+using System;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using Image = UnityEngine.UIElements.Image;
 
 public class StatsHandler : MonoBehaviour {
@@ -11,15 +11,13 @@ public class StatsHandler : MonoBehaviour {
 	[SerializeField] private Sprite moodGood;
 	[SerializeField] private Sprite moodMeh;
 	[SerializeField] private Sprite moodBad;
-	
+
 	private void OnEnable() {
-		Spawner[] spawners = FindObjectsOfType<Spawner>();
-		foreach (Spawner spawner in spawners) {
-			spawner.OnBalanceChange.AddListener(OnItemBuy);
-		}
+		FindObjectOfType<PlayerInteraction>().OnBalanceChange.AddListener(UpdateText);
 	}
 
-	private void OnItemBuy(int newBalance) {
+	public void UpdateText(int newBalance) {
 		balanceLabel.SetText(newBalance.ToString());
+
 	}
 }

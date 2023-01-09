@@ -16,7 +16,7 @@ public class Bubble : MonoBehaviour {
     }
 
     public void DisplayItem(ItemType itemType, bool isThought) {
-		Debug.Log(_renderer.sprite);
+		Debug.Log(itemType.label);
 		_renderer.enabled = true;
 		_renderer.sprite = itemType.baseSprite;
 	}

@@ -178,12 +178,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9bd314d4afe6fc45b7ca5bf1880152a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  balance: 500
   interactDist: 0.75
   spawnerHandler: {fileID: 0}
   itemHandler: {fileID: 0}
   plotHandler: {fileID: 0}
   waterHandler: {fileID: 0}
+  peopleHandler: {fileID: 0}
   bucketHandler: {fileID: 0}
-  heldItem: {fileID: 0}
-  heldBucket: {fileID: 0}
+  scytheHandler: {fileID: 0}
+  OnBalanceChange:
+    m_PersistentCalls:
+      m_Calls: []
   indicator: {fileID: 0}

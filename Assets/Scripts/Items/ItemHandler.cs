@@ -5,10 +5,7 @@ using System.Linq;
 
 public class ItemHandler : MonoBehaviour {
 	private List<Item> _items;
-
-	// Start is called before the first frame update
-	void Start() { }
-
+	
 	public Item GetClosestItem(Vector3 pos, Item holding, ref float minDistSq) {
 		_items = FindObjectsOfType<Item>().ToList();
 		Item closest = null;

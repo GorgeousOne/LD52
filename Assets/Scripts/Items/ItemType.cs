@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = "New Item", menuName = "Item")]
 public class ItemType : ScriptableObject
 {
 	public int id;
-	public string name;
+	public string label;
 	public int price;
 	[Range(0.01f, 1)] public float npcChance;
 	public GameObject prefab;
@@ -22,6 +23,7 @@ public class ItemType : ScriptableObject
 	public Item OnCreation(Vector2 pos, bool isSeed = false) {
 		GameObject itemDrop = Instantiate(prefab, GameObject.Find("ItemHandler").transform);
 		Item item = itemDrop.GetComponent<Item>();
+		item.transform.position = pos;
 		item.SetType(this, isSeed);
 		return item;
 		// gameobject.transform.parent = GameObject.Find("ItemHandler").transform;

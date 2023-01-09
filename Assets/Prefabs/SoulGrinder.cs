@@ -12,7 +12,7 @@ public class SoulGrinder : Spawner
     {
         if (soul.itemType.id == -1)
         {
-            Destroy(soul);
+            Destroy(soul.gameObject);
             return itemType.OnCreation(transform.position + .5f * Vector3.up);
         }
         return soul;

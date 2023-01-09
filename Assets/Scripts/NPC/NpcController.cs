@@ -69,16 +69,16 @@ public class NpcController : Interactable {
         OnDeath.Invoke(this);
     }
 	
-    public bool Trade(Item i)
+    public bool Trade(Item i, ref int balance)
 	{
 		Debug.Log("Trading...");
 
-		if (i.itemType.id == wantedItemType.id) {
-			Destroy(i);
-			OnItemReceive.Invoke(this);
-			return true;
+		if (i.itemType.id != wantedItemType.id) {
+			return false;
 		}
-		return false;
+		balance += i.itemType.price - 10;
+		OnItemReceive.Invoke(this);
+		return true;
 	}
 
 	public void Walk(int queueIdx, Vector2 target, float duration) {

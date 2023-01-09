@@ -9,11 +9,15 @@ public class Item : MonoBehaviour {
 
 	private void OnEnable() {
 		_icon = GetComponent<SpriteRenderer>();
+
+		if (itemType) {
+			SetType(itemType);
+		}
 	}
 
 	public void SetType(ItemType type, bool isSeed = false) {
 		itemType = type;
 		_isSeed = isSeed;
-		_icon.sprite = _isSeed ? itemType.seedSprite : itemType.finishedSprite;
+		_icon.sprite = _isSeed ? itemType.seedSprite : itemType.baseSprite;
 	}
 }
