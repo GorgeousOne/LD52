@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class StatsHandler : MonoBehaviour {
@@ -8,15 +9,16 @@ public class StatsHandler : MonoBehaviour {
 	[SerializeField] private TextMeshProUGUI soldLabel;
 	[SerializeField] private TextMeshProUGUI balanceLabel;
 	[SerializeField] private Slider moodBar;
+	
 	[Range(1, 180)][SerializeField] private float moodIntervalStart = 45;
 	[Range(1, 60)][SerializeField] private float moodIntervalEnd = 20;
 	[Range(60, 600)][SerializeField] private float moodSlopeTime = 180;
-
+	
 	[SerializeField] private List<Sprite> moods;
-
 	[SerializeField] private GameObject deathScreen;
 	[SerializeField] private TextMeshProUGUI deathMessage;
-
+	[SerializeField] private Button restartBtn;
+	
 	private int _soldCount;
 	private float _crowdMood;
 	private bool _isBargaining;
@@ -33,7 +35,7 @@ public class StatsHandler : MonoBehaviour {
 		PeopleHandler peopleHandler = FindObjectOfType<PeopleHandler>();
 		peopleHandler.OnItemSell.AddListener(_IncreaseMood);
 		peopleHandler.OnBargainBegin.AddListener(_StartMoodDecrease);
-		peopleHandler.OnItemSell.AddListener(_EndMoodDecrease);
+		peopleHandler.OnBargainEnd.AddListener(_EndMoodDecrease);
 		FindObjectOfType<PlayerInteraction>().OnBalanceChange.AddListener(_UpdateText);
 		FindObjectOfType<Scythe>().OnKill.AddListener(_DecreaseMood);
 
@@ -45,6 +47,8 @@ public class StatsHandler : MonoBehaviour {
 		_crowdMood = 1;
 		_moodBarIcon = moodBar.handleRect.GetComponent<Image>();
 		_UpdateEmoji();
+
+		restartBtn.onClick.AddListener(_Restart);
 	}
 
 	private void Update() {
@@ -94,14 +98,19 @@ public class StatsHandler : MonoBehaviour {
 	private void _UpdateEmoji() {
 		int moodIndex = Mathf.Clamp((int) (_crowdMood * moods.Count), 0, moods.Count - 1);
 		_moodBarIcon.sprite = moods[moodIndex];
-		_music.pitch = 1 + .1f * (moods.Count - 1 - (int) _crowdMood);
+		_music.pitch = 1 + .1f * (moods.Count - 1 - moodIndex);
 	}
 
 	private void _DeathScreen(string message) {
-		Time.timeScale = 0;
 		_music.Stop();
 		_deathAudio.Play();
 		deathScreen.SetActive(true);
 		deathMessage.text = message;
+		Time.timeScale = 0;
+	}
+
+	private void _Restart() {
+		Time.timeScale = 0;
+		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 	}
 }

@@ -74,8 +74,6 @@ public class NpcController : Interactable {
 	
     public bool Trade(Item i, ref int balance)
 	{
-		Debug.Log("Trading...");
-
 		if (i.itemType.id != wantedItemType.id || i.IsSeed) {
 			return false;
 		}

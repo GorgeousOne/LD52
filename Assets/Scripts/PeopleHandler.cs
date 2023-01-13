@@ -92,13 +92,10 @@ public class PeopleHandler : MonoBehaviour {
 		OnItemSell.Invoke();
 		_waitingPeople.Remove(person);
 		person.Walk(-1, _exitPoint, 3*walkDuration);
+		OnBargainEnd.Invoke();
 		
 		foreach (NpcController other in _waitingPeople) {
 			other.Walk(other.queueIndex - 1 , _waypoints[other.queueIndex - 1], walkDuration);
-		}
-
-		if (_waitingPeople.Count == 0) {
-			OnBargainEnd.Invoke();
 		}
 	}
 	
@@ -106,9 +103,9 @@ public class PeopleHandler : MonoBehaviour {
 	{
 		_waitingPeople.Remove(person);
 		Destroy(person.gameObject);
-
-		foreach (NpcController other in _waitingPeople)
-		{
+		OnBargainEnd.Invoke();
+		
+		foreach (NpcController other in _waitingPeople) {
 			other.Walk(other.queueIndex - 1, _waypoints[other.queueIndex - 1], walkDuration);
 		}
 	}

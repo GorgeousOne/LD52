@@ -7,7 +7,7 @@ using UnityEngine.Serialization;
 public class PlayerInteraction : MonoBehaviour {
 	//dont look at this
 	
-	[Min(0)] public int balance = 500;
+	[Min(0)] public int balance = 650;
 	[SerializeField] private float interactDist = 1.00f;
 	[SerializeField] private SpawnerHandler spawnerHandler;
 	[SerializeField] private ItemHandler itemHandler;
