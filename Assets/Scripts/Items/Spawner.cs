@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -10,8 +11,11 @@ public class Spawner : MonoBehaviour {
     
     public virtual void OnEnable() {
         Audio = GetComponent<AudioSource>();
-        SpriteRenderer icon = transform.GetChild(0).GetComponent<SpriteRenderer>();
-        icon.sprite = itemType.baseSprite;
+        try {
+            SpriteRenderer icon = transform.GetChild(0).GetComponent<SpriteRenderer>();
+            icon.sprite = itemType.baseSprite;
+        }
+        catch (UnityException childoutofbounds) {}
     }
 
     public virtual Item GetItem(ref int balance) {//add a cost to the Item
